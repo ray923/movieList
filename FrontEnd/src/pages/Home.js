@@ -11,11 +11,10 @@ import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
-import Button from "components/CustomButtons/Button.js";
 import Parallax from "components/Parallax/Parallax.js";
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.js";
-import SectionCarousel from './HomeComponent/SectionCarousel';
+import Card from './HomeComponent/Card';
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 
@@ -27,7 +26,7 @@ export default function Home(props) {
   return (
     <div>
       <Header
-        brand="Material Kit React"
+        brand="Movie List Demo"
         rightLinks={<HeaderLinks />}
         fixed
         color="transparent"
@@ -42,24 +41,36 @@ export default function Home(props) {
           <GridContainer>
             <GridItem>
               <div className={classes.brand}>
-                <h1 className={classes.title}>Material Kit React.</h1>
+                <h1 className={classes.title}>Ads.</h1>
                 <h3 className={classes.subtitle}>
-                  A Badass Material-UI Kit based on Material Design.
+                  here is an Ads.
                 </h3>
               </div>
             </GridItem>
           </GridContainer>
         </div>
       </Parallax>
-      <SectionCarousel />
       <div className={classNames(classes.main, classes.mainRaised)}>
-        <GridItem md={12} className={classes.textCenter}>
-          <Link to={"/login-page"} className={classes.link}>
-            <Button color="primary" size="lg" simple>
-              View Login Page
-            </Button>
-          </Link>
+      <GridContainer>
+        <GridItem spacing={2} xs={2}>
+          <Card></Card>
         </GridItem>
+        <GridItem spacing={2} xs={2}>
+          <Card></Card>
+        </GridItem>
+        <GridItem spacing={2} xs={2}>
+          <Card></Card>
+        </GridItem>
+        <GridItem spacing={2} xs={2}>
+          <Card></Card>
+        </GridItem>
+        <GridItem spacing={2} xs={2}>
+          <Card></Card>
+        </GridItem>
+        <GridItem spacing={2} xs={2}>
+          <Card></Card>
+        </GridItem>
+      </GridContainer>
       </div>
       <Footer />
     </div>
