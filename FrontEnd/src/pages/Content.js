@@ -24,7 +24,7 @@ const dashboardRoutes = [];
 
 const useStyles = makeStyles(styles);
 
-export default function LandingPage(props) {
+export default function Content(props) {
   const classes = useStyles();
   const { ...rest } = props;
   return (
@@ -32,7 +32,7 @@ export default function LandingPage(props) {
       <Header
         color="transparent"
         routes={dashboardRoutes}
-        brand="Material Kit React"
+        brand="Content Page - Movie Name"
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
