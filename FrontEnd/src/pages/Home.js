@@ -17,12 +17,29 @@ import HeaderLinks from "components/Header/HeaderLinks.js";
 import Card from './HomeComponent/Card';
 
 import styles from "assets/jss/material-kit-react/views/components.js";
+import movies from "data/movie.json";
 
 const useStyles = makeStyles(styles);
 
 export default function Home(props) {
   const classes = useStyles();
   const { ...rest } = props;
+
+  function RenderMovieCards () {
+    return movies.movies.map((item) => {
+      return (
+        <GridItem spacing={2} xs={2}>
+            <Card
+              Id={item.Id}
+              Name={item.Name}
+              ListImgUrl={item.ListImgUrl}
+              SubTitle={item.SubTitle}
+            ></Card>
+        </GridItem>
+      )
+    })
+  };
+
   return (
     <div>
       <Header
@@ -52,24 +69,7 @@ export default function Home(props) {
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
       <GridContainer>
-        <GridItem spacing={2} xs={2}>
-          <Card></Card>
-        </GridItem>
-        <GridItem spacing={2} xs={2}>
-          <Card></Card>
-        </GridItem>
-        <GridItem spacing={2} xs={2}>
-          <Card></Card>
-        </GridItem>
-        <GridItem spacing={2} xs={2}>
-          <Card></Card>
-        </GridItem>
-        <GridItem spacing={2} xs={2}>
-          <Card></Card>
-        </GridItem>
-        <GridItem spacing={2} xs={2}>
-          <Card></Card>
-        </GridItem>
+        {RenderMovieCards()}
       </GridContainer>
       </div>
       <Footer />
