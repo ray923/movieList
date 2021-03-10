@@ -18,8 +18,10 @@ import Parallax from "components/Parallax/Parallax.js";
 import styles from "assets/jss/material-kit-react/views/landingPage.js";
 
 // Sections for this page
-import ProductSection from "./Sections/ProductSection.js";
 import TeamSection from "./Sections/TeamSection.js";
+
+import Movies from "data/movie.json";
+
 const dashboardRoutes = [];
 
 const useStyles = makeStyles(styles);
@@ -27,12 +29,15 @@ const useStyles = makeStyles(styles);
 export default function Content(props) {
   const classes = useStyles();
   const { ...rest } = props;
+  const movieId = props.location.pathname.split('/')[2];
+  const movie = Movies.movies.find((item)=> item.Id.toString()===movieId);
+  
   return (
     <div>
       <Header
         color="transparent"
         routes={dashboardRoutes}
-        brand="Content Page - Movie Name"
+        brand={movie.Name}
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
@@ -45,7 +50,7 @@ export default function Content(props) {
         <div className={classes.container}>
           <GridContainer>
             <GridItem xs={12} sm={12} md={6}>
-              <h1 className={classes.title}>Your Story Starts With Us.</h1>
+              <h1 className={classes.title}>{movie.Name}</h1>
               <h4>
                 Every landing page needs a small description after the big bold
                 title, that{"'"}s why we added this text here. Add here all the
@@ -58,8 +63,9 @@ export default function Content(props) {
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
-          <TeamSection />
-          <ProductSection />
+          <TeamSection 
+            Movie={movie}
+          />
           <Button color="primary">Go to Downlaod</Button>
         </div>
       </div>
