@@ -18,7 +18,7 @@ import Parallax from "components/Parallax/Parallax.js";
 import styles from "assets/jss/material-kit-react/views/landingPage.js";
 
 // Sections for this page
-import TeamSection from "./Sections/TeamSection.js";
+import ContentSection from "./Sections/ContentSection.js";
 
 import Movies from "data/movie.json";
 
@@ -63,10 +63,10 @@ export default function Content(props) {
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
-          <TeamSection 
+          <ContentSection 
             Movie={movie}
           />
-          <Button color="primary">Go to Downlaod</Button>
+          <Button color="primary" href={`../download/` + movie.Id}>Go to Downlaod</Button>
         </div>
       </div>
       <Footer />
