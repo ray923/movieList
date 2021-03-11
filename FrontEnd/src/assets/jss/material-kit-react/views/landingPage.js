@@ -34,6 +34,7 @@ const landingPageStyle = {
   parallaxDownload: {
     "padding-top": "10vh",
     height:"auto",
+    "min-height": "30vh",
     "max-height": "none"
   }
 };

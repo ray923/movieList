@@ -2,52 +2,79 @@ import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
-// @material-ui/icons
-import Chat from "@material-ui/icons/Chat";
-import VerifiedUser from "@material-ui/icons/VerifiedUser";
-import Fingerprint from "@material-ui/icons/Fingerprint";
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
-import InfoArea from "components/InfoArea/InfoArea.js";
+import Paper from '@material-ui/core/Paper';
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/productStyle.js";
 
 const useStyles = makeStyles(styles);
 
-export default function Download() {
+export default function Download(props) {
   const classes = useStyles();
+  function RenderOnlinePlaySection(){
+    if(props.Download.OnlinePlay)
+    {
+      return (
+        <GridItem xs={12} sm={12} md={12}>
+          <h2 className={classes.title}>OnlinePaly</h2>
+          <Paper 
+            elevation={3} 
+            children=
+              {Object.keys(props.Download.OnlinePlay).map((item) => {
+                return (
+                  <a href={props.Download.OnlinePlay[item]}>{item}</a>
+                )
+              })}
+          />
+        </GridItem>
+      )
+    }
+  }
+
+  function RenderResources() {
+    if(props.Download.Resource)
+    {
+      return (
+        <GridItem xs={12} sm={12} md={12}>
+          {Object.keys(props.Download.Resource).map((item) => {
+            return (
+              <>
+                <h2 className={classes.title}>{item}</h2>
+                <Paper 
+                  elevation={3}
+                  children=
+                  {
+                    Object.keys(props.Download.Resource[item]).map((e) => {
+                      if(e.toString() !== "Others"){
+                        return (
+                          <a href={props.Download.Resource[item][e]}>{e}</a>
+                        )
+                      }
+                      else
+                      {
+                        return (
+                          <h4>{props.Download.Resource[item][e]}</h4>
+                        )
+                      }
+                    })
+                  }
+                />
+              </>
+            )
+          })}
+        </GridItem>
+      )
+    }
+  }
+
   return (
     <div className={classes.section}>
       <div>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={12}>
-            <InfoArea
-              title="Free Chat"
-              description="Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough."
-              icon={Chat}
-              iconColor="info"
-              vertical
-            />
-          </GridItem>
-          <GridItem xs={12} sm={12} md={12}>
-            <InfoArea
-              title="Verified Users"
-              description="Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough."
-              icon={VerifiedUser}
-              iconColor="success"
-              vertical
-            />
-          </GridItem>
-          <GridItem xs={12} sm={12} md={12}>
-            <InfoArea
-              title="Fingerprint"
-              description="Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough."
-              icon={Fingerprint}
-              iconColor="danger"
-              vertical
-            />
-          </GridItem>
+          {RenderOnlinePlaySection()}
+          {RenderResources()}
         </GridContainer>
       </div>
     </div>
