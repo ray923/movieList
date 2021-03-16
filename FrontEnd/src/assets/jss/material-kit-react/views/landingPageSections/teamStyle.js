@@ -41,6 +41,12 @@ const teamStyle = {
   },
   margin5: {
     margin: "5px"
+  },
+  overView: {
+    fontSize: 20
+  },
+  introduction: {
+    fontSize: 20
   }
 };
 

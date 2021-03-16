@@ -13,7 +13,10 @@ const useStyles = makeStyles({
     maxWidth: 345,
   },
   media: {
-    height: 140,
+    maxwidth: 284,
+    minwidth: 142,
+    minheight: 200,
+    height: 400
   },
 });
 
@@ -24,11 +27,11 @@ export default function MediaCard(props) {
 
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea href={`content/` + props.Id}>
         <CardMedia
           className={classes.media}
           image={props.ListImgUrl}
-          title="Contemplative Reptile"
+          title={props.Name}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
@@ -40,8 +43,8 @@ export default function MediaCard(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
-          <a href={`content/` + props.Id}>Learn More</a>
+        <Button size="small" color="primary" href={`content/` + props.Id}>
+          Learn More
         </Button>
       </CardActions>
     </Card>

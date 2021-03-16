@@ -8,6 +8,7 @@ import GridItem from "components/Grid/GridItem.js";
 import Paper from '@material-ui/core/Paper';
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/productStyle.js";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles(styles);
 
@@ -24,7 +25,7 @@ export default function Download(props) {
             children=
               {Object.keys(props.Download.OnlinePlay).map((item) => {
                 return (
-                  <a href={props.Download.OnlinePlay[item]}>{item}</a>
+                  <Button color="primary"  href={props.Download.OnlinePlay[item]}>{item}</Button>
                 )
               })}
           />
@@ -49,7 +50,7 @@ export default function Download(props) {
                     Object.keys(props.Download.Resource[item]).map((e) => {
                       if(e.toString() !== "Others"){
                         return (
-                          <a href={props.Download.Resource[item][e]}>{e}</a>
+                          <Button color="primary" href={props.Download.Resource[item][e]}>{e}</Button>
                         )
                       }
                       else

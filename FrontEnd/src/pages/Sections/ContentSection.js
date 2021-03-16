@@ -33,8 +33,8 @@ export default function ContentSection(props) {
                 <img src={props.Movie.ImgUrl} alt="..." className={imageClasses} />
               </GridItem>
               <CardBody>
-                <div className="commentContent" dangerouslySetInnerHTML={{ __html: props.Movie.Overview }} />
-                <p className={classes.title}>
+                <div className={classes.overView} dangerouslySetInnerHTML={{ __html: props.Movie.Overview }} />
+                <p className={classNames(classes.title, classes.introduction)}>
                   {props.Movie.Introduction}
                 </p>
               </CardBody>

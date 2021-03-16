@@ -33,6 +33,9 @@ const componentsStyle = {
   },
   textCenter: {
     textAlign: "center"
+  },
+  cardMargin: {
+    margin: "20px 10px"
   }
 };
 

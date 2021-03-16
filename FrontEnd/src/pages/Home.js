@@ -28,7 +28,7 @@ export default function Home(props) {
   function RenderMovieCards () {
     return movies.movies.map((item) => {
       return (
-        <GridItem spacing={2} xs={2}>
+        <GridItem spacing={2} xs={2} className={classNames(classes.cardMargin)}>
             <Card
               Id={item.Id}
               Name={item.Name}
