@@ -4,5 +4,6 @@ namespace Crawler
 {
     public class Ainunu
     {
+        
     }
 }
