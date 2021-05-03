@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "u/5nx1GIGTYMj1O+D/Ee2wVwS/f1748IAyOfgM6IfsLdKqKaVZpO4peuC5HAW23Z9FIFBSHpxrbbxEBsN9FpoQ==",
+  "dgSpecHash": "UYvCcCko64crHvGBgZHeh5PjaxV4OPeJQ3L1MYiOQ7ijIsEpp9iYk0/n00eU9nVEpp+VWbaSt5BsTxHFLqMB7Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\RuiyiWang\\OneDrive - Simple - HQ\\Documents\\GitHub\\movieList\\BackEnd\\Crawler\\Crawler.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\RuiyiWang\\.nuget\\packages\\htmlagilitypack\\1.11.33\\htmlagilitypack.1.11.33.nupkg.sha512"
+  ],
   "logs": []
 }
