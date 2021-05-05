@@ -23,7 +23,7 @@ namespace Crawler
                     if(response.StatusCode != HttpStatusCode.OK)
                     {
                         //To do Log4net;
-                        //logger.Warn(string.Format("catch{0} failure", url));
+                        LogHelper.Info(string.Format("catch{0} failure", url));
                     }
                     else
                     {
@@ -35,7 +35,7 @@ namespace Crawler
                         }
                         catch (Exception ex)
                         {
-                            //logger.Error(string.Format($"catch{url} failure"), ex);
+                            LogHelper.Error(string.Format($"catch{url} failure"), ex);
                             html = null;
                         }
                     }
@@ -45,13 +45,13 @@ namespace Crawler
             {
                 if(ex.Message.Equals("306"))
                 {
-                    //logger.Error("306", ex);
+                    LogHelper.Error("306", ex);
                     html = null;
                 }
             }
             catch (Exception ex)
             {
-                //logger.Error(string.Format("Downlaod {0} error", url), ex);
+                LogHelper.Error(string.Format("Downlaod {0} error", url), ex);
                 html = null;
             }
             return html;
