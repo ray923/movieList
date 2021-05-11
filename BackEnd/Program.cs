@@ -9,6 +9,7 @@ namespace BackEnd
         {
             var Ainunu = new Ainunu();
             var AinunuHtml = Ainunu.GetAinunuContent();
+            //Ainunu.GetMovieList(AinunuHtml);
             Console.WriteLine(AinunuHtml);
         }
     }
