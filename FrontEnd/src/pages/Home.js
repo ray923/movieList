@@ -3,8 +3,6 @@ import { useState, useEffect } from "react"; // useState is a hook
 import InfiniteScroll from 'react-infinite-scroll-component';
 // nodejs library that concatenates classes
 import classNames from "classnames";
-// react components for routing our app without refresh
-import { Link } from "react-router-dom";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
@@ -29,19 +27,16 @@ export default function Home(props) {
   const [loadedMoives, setLoadedMoives] = useState([]);
   const numberPerLoad = 30;
 
-  useEffect(() => { 
-    fetchMoreData();
-  }, []);
   const fetchMoreData = () => {
-    console.log("fetchMoreData");
     var startIndex = loadedMoives.length;
-    console.log("startIndex: " + startIndex);
     var endIndex = startIndex + numberPerLoad;
-    console.log("movies: " + movies);
     var loadedMovieList = movies.slice(startIndex, endIndex);
     setLoadedMoives([...loadedMoives, ...loadedMovieList]);
-    console.log(loadedMoives);
   }
+
+  useEffect(() => { 
+    fetchMoreData();
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   function RenderMovieCards() {
     console.log("RenderMovieCards");
