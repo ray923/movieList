@@ -3,14 +3,15 @@ using Crawler;
 
 namespace BackEnd
 {
-    class Program
+  class Program
+  {
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            var Ainunu = new Ainunu();
-            var AinunuHtml = Ainunu.GetAinunuContent();
-            //Ainunu.GetMovieList(AinunuHtml);
-            Console.WriteLine(AinunuHtml);
-        }
+      var Ainunu = new Ainunu();
+      var AinunuMoiveJson = Ainunu.GetAinunuContent();
+      var JsonFileHelper = new JsonFileHelper();
+      JsonFileHelper.WriteJsonFile("Data.json", AinunuMoiveJson);
+      //Console.WriteLine(AinunuHtml);
     }
+  }
 }

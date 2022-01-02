@@ -21,10 +21,19 @@ export default function ContentSection(props) {
     classes.imgRounded,
     classes.imgFluid
   );
+
+  function HTMLDecode(text) { 
+    var temp = document.createElement("div"); 
+    temp.innerHTML = text; 
+    var output = temp.innerText || temp.textContent; 
+    temp = null; 
+    return output; 
+  } 
+
   return (
     <div className={classes.section}>
       <h2 className={classes.title}>{props.Movie.Name}{props.Movie.SubName}  {props.Movie.SubTitle}</h2>
-      <h4 className={classes.title} >Update Date {props.Movie.UpdateDate}</h4>
+      <h4 className={classes.title} >{props.Movie.UpdateDate}</h4>
       <div>
         <GridContainer>
           <GridItem xs={12} sm={12} md={4}>
@@ -35,7 +44,7 @@ export default function ContentSection(props) {
               <CardBody>
                 <div className={classes.overView} dangerouslySetInnerHTML={{ __html: props.Movie.Overview }} />
                 <p className={classNames(classes.title, classes.introduction)}>
-                  {props.Movie.Introduction}
+                {HTMLDecode(props.Movie.Introduction)}
                 </p>
               </CardBody>
             </Card>
