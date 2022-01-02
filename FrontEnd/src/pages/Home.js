@@ -1,4 +1,6 @@
 import React from "react";
+import { useState, useEffect } from "react"; // useState is a hook
+import InfiniteScroll from 'react-infinite-scroll-component';
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // react components for routing our app without refresh
@@ -24,11 +26,28 @@ const useStyles = makeStyles(styles);
 export default function Home(props) {
   const classes = useStyles();
   const { ...rest } = props;
+  const [loadedMoives, setLoadedMoives] = useState([]);
+  const numberPerLoad = 30;
 
-  function RenderMovieCards () {
-    return movies.movies.map((item) => {
+  useEffect(() => { 
+    fetchMoreData();
+  }, []);
+  const fetchMoreData = () => {
+    console.log("fetchMoreData");
+    var startIndex = loadedMoives.length;
+    console.log("startIndex: " + startIndex);
+    var endIndex = startIndex + numberPerLoad;
+    console.log("movies: " + movies);
+    var loadedMovieList = movies.slice(startIndex, endIndex);
+    setLoadedMoives([...loadedMoives, ...loadedMovieList]);
+    console.log(loadedMoives);
+  }
+
+  function RenderMovieCards() {
+    console.log("RenderMovieCards");
+    return loadedMoives.map((item) => {
       return (
-        <GridItem spacing={2} xs={2} className={classNames(classes.cardMargin)}>
+        <GridItem xs={2} className={classNames(classes.cardMargin)} key={item.Id}>
             <Card
               Id={item.Id}
               Name={item.Name}
@@ -68,9 +87,17 @@ export default function Home(props) {
         </div>
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
-      <GridContainer>
-        {RenderMovieCards()}
-      </GridContainer>
+        <InfiniteScroll
+          dataLength={loadedMoives.length}
+          next={fetchMoreData}
+          hasMore={movies.length > loadedMoives.length ? true : false}
+          loader={<div style={{textAlign:"center"}}><h4>Loading...</h4></div>}
+          endMessage={<div style={{textAlign:"center"}}><h4>End</h4></div>}
+        >
+          <GridContainer>
+            {RenderMovieCards()}
+          </GridContainer>
+        </InfiniteScroll>
       </div>
       <Footer />
     </div>

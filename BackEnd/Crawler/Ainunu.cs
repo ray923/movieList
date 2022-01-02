@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using HtmlAgilityPack;
+using Newtonsoft.Json;
 
 namespace Crawler
 {
@@ -11,24 +13,30 @@ namespace Crawler
     public string GetAinunuContent()
     {
       Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+      var movieList = new List<AinunuMovieDTO>();
       //for (int i = 0; i >= 0; i++)
-      for (int i = 1; i <= 1; i++)
+      for (int i = 1; i <= 410; i++)//410 total
       {
         var url = baseUrl + "/c/movie/list_" + i.ToString() + ".html";
         var helper = new CrawlerHelper();
         var html = helper.DownloadHtml(url, Encoding.GetEncoding("GB2312"));
         if (html == "") break;
         HtmlNodeCollection nodes = GetMovieList(html);
+
         for (int j = 0; j < nodes.Count; j++)
         {
           HtmlNode node = nodes[j].SelectSingleNode("child::a[2]");
           string detaiRelativelUrl = node.GetAttributeValue("href", "");
           string movieDetailPageUrl = baseUrl + detaiRelativelUrl;
           Id += 1;
-          GetMovieDetail(movieDetailPageUrl, Id);
+          var movie = GetMovieDetail(movieDetailPageUrl, Id);
+          if (movie != null)
+          {
+            movieList.Add(movie);
+          }
         }
       }
-      return "end";
+      return JsonConvert.SerializeObject(movieList);
     }
 
     public HtmlNodeCollection GetMovieList(string htmlContent)
@@ -39,22 +47,38 @@ namespace Crawler
       return nodes;
     }
 
-    public void GetMovieDetail(string movieDetailPageUrl, int Id)
+    public AinunuMovieDTO GetMovieDetail(string movieDetailPageUrl, int Id)
     {
+      Console.WriteLine(Id);
       var helper = new CrawlerHelper();
       var html = helper.DownloadHtml(movieDetailPageUrl, Encoding.GetEncoding("GB2312"));
       HtmlDocument document = new HtmlDocument();
       document.LoadHtml(html);
-      HtmlNodeCollection nodes = document.DocumentNode.SelectNodes("/html/body/div[3]/div[0]");
+      //HtmlNodeCollection nodes = document.DocumentNode.SelectNodes("/html/body/div[3]/div[0]");
+      //if (nodes == null) { return null; }
       HtmlNode node = document.DocumentNode.SelectSingleNode("/html/body/div[4]/div[1]/div[3]");
-      string movieName = node.SelectSingleNode("child::div[1]").InnerText;
-      string UpdateDate = node.SelectSingleNode("child::div[2]").InnerText;
+      if (node == null) { return null; }
+      var movieName = node.SelectSingleNode("child::div[1]");
+      if (movieName == null) { return null; }
+      string UpdateDate = node.SelectSingleNode("child::div[2]") != null ? node.SelectSingleNode("child::div[2]").InnerText : "";
       HtmlNode imgNode = node.SelectSingleNode("child::div[3]/p[1]/img");
-      string ImgUrl = imgNode.GetAttributeValue("src", "");
-      string Overview = node.SelectSingleNode("child::div[3]/p[2]").InnerText;
-      string Introduction = node.SelectSingleNode("child::div[3]/p[3]").InnerText;
-      string downloadPageUrl = node.SelectSingleNode("child::div[3]/div[1]/a").GetAttributeValue("href", "");
-      GetMovieDownloadDetail(downloadPageUrl, Id);
+      string ImgUrl = imgNode != null ? imgNode.GetAttributeValue("src", "") : "";
+      string Overview = node.SelectSingleNode("child::div[3]/p[2]") != null ? node.SelectSingleNode("child::div[3]/p[2]").InnerHtml : "";
+      string Introduction = node.SelectSingleNode("child::div[3]/p[3]") != null ? node.SelectSingleNode("child::div[3]/p[3]").InnerHtml : "";
+      string downloadPageUrl = node.SelectSingleNode("child::div[3]/div[1]/a") != null ? node.SelectSingleNode("child::div[3]/div[1]/a").GetAttributeValue("href", "") : "";
+      var movie = new AinunuMovieDTO()
+      {
+        Id = Id,
+        Name = movieName.InnerText,
+        ListImgUrl = ImgUrl,
+        UpdateDate = UpdateDate,
+        ImgUrl = ImgUrl,
+        Overview = Overview,
+        Introduction = Introduction,
+        DownloadUrl = downloadPageUrl
+      };
+      return movie;
+      //GetMovieDownloadDetail(downloadPageUrl, Id);
     }
 
     public void GetMovieDownloadDetail(string downloadPageUrl, int MovieId)
