@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react"; // useState is a hook
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -28,9 +29,13 @@ const useStyles = makeStyles(styles);
 export default function Content(props) {
   const classes = useStyles();
   const { ...rest } = props;
-  const movieId = props.location.pathname.split('/')[2];
-  const movie = Movies.find((item)=> item.Id.toString()===movieId);
+  const [movie,setMovie] = useState(null);
   
+  useEffect(() => {
+      const movieId = props.location.pathname.split('/')[2];
+      setMovie(Movies.find((item)=> item.Id.toString()===movieId));
+    }, [props.location.pathname]);// eslint-disable-line react-hooks/exhaustive-deps
+
   const LeftLinks = <Tooltip
     title="返回首页"
     placement="left"
@@ -38,7 +43,7 @@ export default function Content(props) {
   >
     <Button
       color="transparent"
-      href="/"
+      href="/#/"
       className={classes.navLink}
     >
       <i className={classes.socialIcons + " fas fa-arrow-left"} /> Back
@@ -47,7 +52,7 @@ export default function Content(props) {
 
   return (
     <div>
-      <Header
+      {movie && (<><Header
         color="transparent"
         //routes={dashboardRoutes}
         brand={movie.Name}
@@ -78,7 +83,7 @@ export default function Content(props) {
           <Button target="_blank" color="primary" href={movie.DownloadUrl}>Go to Downlaod</Button>
         </div>
       </div>
-      <Footer />
+      <Footer /></>)}
     </div>
   );
 }

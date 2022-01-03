@@ -27,7 +27,7 @@ export default function MediaCard(props) {
 
   return (
     <Card className={classes.root}>
-      <CardActionArea href={`content/` + props.Id}>
+      <CardActionArea href={`/#/content/` + props.Id}>
         <CardMedia
           className={classes.media}
           image={props.ListImgUrl}
@@ -43,7 +43,7 @@ export default function MediaCard(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary" href={`content/` + props.Id}>
+        <Button size="small" color="primary" href={`/#/content/` + props.Id}>
           Learn More
         </Button>
       </CardActions>
