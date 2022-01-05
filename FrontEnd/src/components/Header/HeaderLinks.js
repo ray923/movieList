@@ -37,21 +37,27 @@ export default function HeaderLinks(props) {
           buttonIcon={Apps}
           dropdownList={[
             <Link to="/" className={classes.dropdownLink}>
-              分类1
+              所有电影
             </Link>,
-            <a
-              href="https://creativetimofficial.github.io/material-kit-react/#/documentation?ref=mkr-navbar"
-              target="_blank"
-              className={classes.dropdownLink}
-            >
-              分类2
-            </a>
+            <Link to="/Cat/1" className={classes.dropdownLink}>
+              美国电影
+            </Link>,
+            <Link to="/Cat/2" className={classes.dropdownLink}>
+              其他电影
+            </Link>
+            // <a
+            //   href="https://creativetimofficial.github.io/material-kit-react/#/documentation?ref=mkr-navbar"
+            //   target="_blank"
+            //   className={classes.dropdownLink}
+            // >
+            //   其他电影
+            // </a>
           ]}
         />
       </ListItem>
       <ListItem className={classes.listItem}>
         <Button
-          href="https://www.creative-tim.com/product/material-kit-react?ref=mkr-navbar"
+          href="https://www.mac-downloader.com/"
           color="transparent"
           target="_blank"
           className={classes.navLink}
@@ -62,21 +68,21 @@ export default function HeaderLinks(props) {
       <ListItem className={classes.listItem}>
         <Tooltip
           id="instagram-facebook"
-          title="联系我们邮箱:aaa@gmail.com"
+          title="邮箱:gmail.com"
           placement={window.innerWidth > 959 ? "top" : "left"}
           classes={{ tooltip: classes.tooltip }}
         >
           <Button
             color="transparent"
-            href="https://www.facebook.com/CreativeTim?ref=creativetim"
-            target="_blank"
+            // href="https://www.facebook.com/CreativeTim?ref=creativetim"
+            // target="_blank"
             className={classes.navLink}
           >
-            <i className={classes.socialIcons + " fab fa-facebook"} />
+            <i className={classes.socialIcons + " far fa-envelope"} />
           </Button>
         </Tooltip>
       </ListItem>
-      <ListItem className={classes.listItem}>
+      {/* <ListItem className={classes.listItem}>
         <Tooltip
           id="instagram-tooltip"
           title="Follow us on instagram"
@@ -92,7 +98,7 @@ export default function HeaderLinks(props) {
             <i className={classes.socialIcons + " fab fa-instagram"} />
           </Button>
         </Tooltip>
-      </ListItem>
+      </ListItem> */}
     </List>
   );
 }

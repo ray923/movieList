@@ -27,10 +27,11 @@ import movies from "data/movie.json";
 const useStyles = makeStyles(styles);
 const useSearch_Styles = makeStyles(search_styles);
 
-export default function Home(props) {
+export default function Categary(props) {
   const classes = useStyles();
   const search_classes = useSearch_Styles();
   const { ...rest } = props;
+  const [filteredMovies, setFilteredMovies] = useState([]);
   const [loadedMoives, setLoadedMoives] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const numberPerLoad = 30;
@@ -38,18 +39,25 @@ export default function Home(props) {
   const fetchMoreData = () => {
     var startIndex = loadedMoives.length;
     var endIndex = startIndex + numberPerLoad;
-    var loadedMovieList = movies.slice(startIndex, endIndex);
+    var loadedMovieList = filteredMovies.slice(startIndex, endIndex);
     setLoadedMoives([...loadedMoives, ...loadedMovieList]);
   }
 
   useEffect(() => { 
+    var result = movies.filter((movie) => { 
+      return props.location.pathname.split('/')[2] === '1' ? movie.Overview.toLowerCase().includes('美国') : !movie.Overview.toLowerCase().includes('美国');
+    })
+    setLoadedMoives([]);
+    setFilteredMovies([...result]);
+  }, [props.location.pathname]);// eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => { 
     fetchMoreData();
-  }, []);// eslint-disable-line react-hooks/exhaustive-deps
+  }, [filteredMovies]);// eslint-disable-line react-hooks/exhaustive-deps
 
   var searchMovie = () => { 
-    console.log(searchInput);
     if (searchInput.length > 0) {
-      var searchResult = movies.filter((movie) => {
+      var searchResult = filteredMovies.filter((movie) => {
         return ((movie.Name && movie.Name.toLowerCase().includes(searchInput.toLowerCase())));
           //|| (movie.SubTitle && movie.SubTitle.toLowerCase().includes(searchInput.toLowerCase()))
           //|| (movie.Introduction && movie.Introduction.toLowerCase().includes(searchInput.toLowerCase()))
@@ -57,7 +65,7 @@ export default function Home(props) {
       });
       setLoadedMoives([...searchResult]);
     } else { 
-      var loadedMovieList = movies.slice(0, numberPerLoad);
+      var loadedMovieList = filteredMovies.slice(0, numberPerLoad);
       setLoadedMoives([...loadedMovieList]);
     }
   }
@@ -133,7 +141,7 @@ export default function Home(props) {
         <InfiniteScroll
           dataLength={loadedMoives.length}
           next={fetchMoreData}
-          hasMore={movies.length > loadedMoives.length ? true : false}
+          hasMore={searchInput.length > 0 ? false : movies.length > loadedMoives.length ? true : false}
           loader={<div style={{textAlign:"center"}}><h4>Loading...</h4></div>}
           endMessage={<div style={{textAlign:"center"}}><h4>End</h4></div>}
         >

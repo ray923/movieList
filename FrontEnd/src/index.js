@@ -9,6 +9,7 @@ import "assets/scss/material-kit-react.scss?v=1.9.0";
 // import ProfilePage from "views/ProfilePage/ProfilePage.js";
 // import LoginPage from "views/LoginPage/LoginPage.js";
 import Home from "pages/Home.js";
+import Cate from "pages/Categary.js";
 import APP from "./APP.js";
 
 ReactDOM.render(
@@ -25,6 +26,7 @@ ReactDOM.render(
   // </Router>,
   <HashRouter>
     <Route exact path='/' component={Home} />
+    <Route exact path='/Cat/:catId' component={Cate} />
     <APP/>
   </HashRouter>,
   document.getElementById("root")
