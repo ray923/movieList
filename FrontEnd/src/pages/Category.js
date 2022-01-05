@@ -27,7 +27,7 @@ import movies from "data/movie.json";
 const useStyles = makeStyles(styles);
 const useSearch_Styles = makeStyles(search_styles);
 
-export default function Categary(props) {
+export default function Category(props) {
   const classes = useStyles();
   const search_classes = useSearch_Styles();
   const { ...rest } = props;
