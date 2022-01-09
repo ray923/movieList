@@ -25,7 +25,8 @@ export default function CustomInput(props) {
     white,
     inputRootCustomClasses,
     success,
-    onChangeValue
+    onChangeValue,
+    searchValue
   } = props;
 
   const labelClasses = classNames({
@@ -74,7 +75,8 @@ export default function CustomInput(props) {
         }}
         id={id}
         {...inputProps}
-        onChange = {(e) => onChangeValue(e.target.value)}
+        onChange={(e) => onChangeValue(e.target.value)}
+        value={searchValue}
       />
     </FormControl>
   );

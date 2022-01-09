@@ -43,6 +43,7 @@ export default function Home(props) {
   }
 
   useEffect(() => { 
+    setSearchInput("");
     fetchMoreData();
   }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
@@ -94,6 +95,7 @@ export default function Home(props) {
             },
           }}
           onChangeValue={(e) => setSearchInput(e)}
+          searchValue={searchInput}
       />
       <Button justIcon round color="white" onClick = {() => searchMovie()}>
         <Search className={search_classes.searchIcon} />
@@ -133,7 +135,7 @@ export default function Home(props) {
         <InfiniteScroll
           dataLength={loadedMoives.length}
           next={fetchMoreData}
-          hasMore={movies.length > loadedMoives.length ? true : false}
+          hasMore={searchInput.length > 0 ? false : movies.length > loadedMoives.length ? true : false}
           loader={<div style={{textAlign:"center"}}><h4>Loading...</h4></div>}
           endMessage={<div style={{textAlign:"center"}}><h4>End</h4></div>}
         >

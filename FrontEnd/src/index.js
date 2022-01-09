@@ -10,7 +10,8 @@ import "assets/scss/material-kit-react.scss?v=1.9.0";
 // import LoginPage from "views/LoginPage/LoginPage.js";
 import Home from "pages/Home.js";
 import Cate from "pages/Category.js";
-import APP from "./APP.js";
+import Download from "pages/Download.js";
+import Content from "pages/Content.js";
 
 ReactDOM.render(
   // <Router history={hist}>
@@ -27,7 +28,8 @@ ReactDOM.render(
   <HashRouter>
     <Route exact path='/' component={Home} />
     <Route exact path='/Cat/:catId' component={Cate} />
-    <APP/>
+    <Route exact path='/D/:movieId' component={Download} />
+    <Route exact path='/content/:movieId' component={Content} />
   </HashRouter>,
   document.getElementById("root")
 );

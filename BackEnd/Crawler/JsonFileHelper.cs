@@ -12,5 +12,13 @@ namespace Crawler
         sw.Write(json);
       }
     }
+
+    public string ReadJsonFile(string filePath)
+    {
+      using (StreamReader sr = new StreamReader(filePath))
+      {
+        return sr.ReadToEnd();
+      }
+    }
   }
 }

@@ -14,51 +14,32 @@ const useStyles = makeStyles(styles);
 
 export default function Download(props) {
   const classes = useStyles();
-  function RenderOnlinePlaySection(){
-    if(props.Download.OnlinePlay)
-    {
-      return (
-        <GridItem xs={12} sm={12} md={12}>
-          <h2 className={classes.title}>OnlinePaly</h2>
-          <Paper 
-            elevation={3} 
-            children=
-              {Object.keys(props.Download.OnlinePlay).map((item) => {
-                return (
-                  <Button color="primary"  href={props.Download.OnlinePlay[item]}>{item}</Button>
-                )
-              })}
-          />
-        </GridItem>
-      )
-    }
-  }
+
+  function HTMLDecode(text) { 
+    var temp = document.createElement("div"); 
+    temp.innerHTML = text; 
+    var output = temp.innerText || temp.textContent; 
+    temp = null; 
+    return output; 
+  } 
 
   function RenderResources() {
-    if(props.Download.Resource)
+    if(props.Download.Resources)
     {
       return (
         <GridItem xs={12} sm={12} md={12}>
-          {Object.keys(props.Download.Resource).map((item) => {
+          {props.Download.Resources.map((item) => {
             return (
               <>
-                <h2 className={classes.title}>{item}</h2>
+                <h4 className={classes.title}>{item.FormatName}</h4>
                 <Paper 
                   elevation={3}
                   children=
                   {
-                    Object.keys(props.Download.Resource[item]).map((e) => {
-                      if(e.toString() !== "Others"){
-                        return (
-                          <Button color="primary" href={props.Download.Resource[item][e]}>{e}</Button>
+                    item.ResourceLinks.map((resource) => {
+                      return (
+                          <><Button color="primary" href={resource.Url}>{resource.Name}</Button>{HTMLDecode(resource.Others)}</>
                         )
-                      }
-                      else
-                      {
-                        return (
-                          <h4>{props.Download.Resource[item][e]}</h4>
-                        )
-                      }
                     })
                   }
                 />
@@ -72,9 +53,9 @@ export default function Download(props) {
 
   return (
     <div className={classes.section}>
+      <h2 className={classes.title}>{props.Download.MovieName}</h2>
       <div>
         <GridContainer>
-          {RenderOnlinePlaySection()}
           {RenderResources()}
         </GridContainer>
       </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react"; // useState is a hook
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -29,14 +30,21 @@ const useStyles = makeStyles(styles);
 export default function Downlaod(props) {
   const classes = useStyles();
   const { ...rest } = props;
-  const movieId = props.location.pathname.split('/')[2];
-  const download = Download.downloads.find((item) => item.MovieId.toString() === movieId);
+  const [movie, setMovie] = useState([]);
+
+  useEffect(() => { 
+    const movieId = props.location.pathname.split('/')[2];
+    console.log(Download);
+    const download = Download.find((item) => item.MovieId.toString() === movieId);
+    setMovie(download);
+  },[props.location.pathname]);// eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div>
       <Header
         color="transparent"
         routes={dashboardRoutes}
-        brand= {download.MovieName + ' Download'}
+        brand= {movie.MovieName + ' Download'}
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
@@ -62,7 +70,7 @@ export default function Downlaod(props) {
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
           <DownloadSection 
-            Download = {download}
+            Download = {movie}
           />
         </div>
       </div>

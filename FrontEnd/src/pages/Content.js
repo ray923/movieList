@@ -79,7 +79,7 @@ export default function Content(props) {
           <ContentSection 
             Movie={movie}
           />
-          {/* <Button color="primary" href={`../download/` + movie.Id}>Go to Downlaod</Button> */}
+          <Button target="_blank" color="primary" href={`/#/D/` + movie.Id}>Go to Downlaod</Button>
           <Button target="_blank" color="primary" href={movie.DownloadUrl}>Go to Downlaod</Button>
         </div>
       </div>

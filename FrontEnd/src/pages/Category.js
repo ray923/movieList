@@ -44,10 +44,24 @@ export default function Category(props) {
   }
 
   useEffect(() => { 
-    var result = movies.filter((movie) => { 
-      return props.location.pathname.split('/')[2] === '1' ? movie.Overview.toLowerCase().includes('美国') : !movie.Overview.toLowerCase().includes('美国');
+    setSearchInput("");
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => { 
+    console.log(searchInput);
+    setSearchInput("");
+    var result = movies.filter((movie) => {
+      switch (props.location.pathname.split('/')[2]) {
+        case '1':
+          return movie.Category === "欧美";
+        case '2':
+          return movie.Category === '日韩';
+        case '3':
+          return movie.Category === '内地';
+        default:
+          return movie;
+      }
     })
-    setLoadedMoives([]);
     setFilteredMovies([...result]);
   }, [props.location.pathname]);// eslint-disable-line react-hooks/exhaustive-deps
 
@@ -102,6 +116,7 @@ export default function Category(props) {
             },
           }}
           onChangeValue={(e) => setSearchInput(e)}
+          searchValue={searchInput}
       />
       <Button justIcon round color="white" onClick = {() => searchMovie()}>
         <Search className={search_classes.searchIcon} />
@@ -141,7 +156,7 @@ export default function Category(props) {
         <InfiniteScroll
           dataLength={loadedMoives.length}
           next={fetchMoreData}
-          hasMore={searchInput.length > 0 ? false : movies.length > loadedMoives.length ? true : false}
+          hasMore={searchInput.length > 0 ? false : filteredMovies.length > loadedMoives.length ? true : false}
           loader={<div style={{textAlign:"center"}}><h4>Loading...</h4></div>}
           endMessage={<div style={{textAlign:"center"}}><h4>End</h4></div>}
         >

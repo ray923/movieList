@@ -40,10 +40,13 @@ export default function HeaderLinks(props) {
               所有电影
             </Link>,
             <Link to="/Cat/1" className={classes.dropdownLink}>
-              美国电影
+              欧美电影
             </Link>,
             <Link to="/Cat/2" className={classes.dropdownLink}>
-              其他电影
+              日韩电影
+            </Link>,
+            <Link to="/Cat/3" className={classes.dropdownLink}>
+              内地电影
             </Link>
             // <a
             //   href="https://creativetimofficial.github.io/material-kit-react/#/documentation?ref=mkr-navbar"

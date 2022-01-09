@@ -8,10 +8,8 @@ namespace BackEnd
     static void Main(string[] args)
     {
       var Ainunu = new Ainunu();
-      var AinunuMoiveJson = Ainunu.GetAinunuContent();
-      var JsonFileHelper = new JsonFileHelper();
-      JsonFileHelper.WriteJsonFile("Data.json", AinunuMoiveJson);
-      //Console.WriteLine(AinunuHtml);
+      var result = Ainunu.GetAinunuContent();//Ainunu电影网站
+      Console.WriteLine(result);
     }
   }
 }
