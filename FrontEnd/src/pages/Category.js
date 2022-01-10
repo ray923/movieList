@@ -50,6 +50,7 @@ export default function Category(props) {
   useEffect(() => { 
     console.log(searchInput);
     setSearchInput("");
+    setLoadedMoives([]);
     var result = movies.filter((movie) => {
       switch (props.location.pathname.split('/')[2]) {
         case '1':

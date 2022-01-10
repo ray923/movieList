@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
@@ -8,18 +9,15 @@ namespace Crawler
 {
   public class Ainunu
   {
-    private int Id = 12286;//Start Id 12286 total -- 2021/1/2
+    private int Id = 15000;//Start Id 12286 total -- 2021/1/2
     private string baseUrl = "http://video.ainunu.net";//邮 箱：khp876*gmail.com （把*替换成@）
     public string GetAinunuContent()
     {
       var JsonFileHelper = new JsonFileHelper();
-      string exsistMoives = JsonFileHelper.ReadJsonFile("Data.json");
-      var tempMoives = JsonConvert.DeserializeObject<List<AinunuMovieDTO>>(exsistMoives);
       Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
       var movieList = new List<AinunuMovieDTO>();
       var downloadList = new List<AinunuDownloadDTO>();
-      //for (int i = 0; i >= 0; i++)
-      for (int i = 1; i <= 410; i++)//410 total -- 2021/1/2
+      for (int i = 1; i <= 410; i++)//410 total -- 2022/1/2 TODO:动态读取总页数
       {
         var url = baseUrl + "/c/movie/list_" + i.ToString() + ".html";
         var helper = new CrawlerHelper();
@@ -44,6 +42,7 @@ namespace Crawler
             {
               detail.movie.UpdateDate = movieUpdateTime;
               detail.movie.Category = movieCategory;
+              detail.movie.UrlName = urlName;
               movieList.Add(detail.movie);
               var download = GetMovieDownloadDetail(detail.movie.DownloadUrl, detail.downloadNodes, detail.movie.Name, Id);
               if (download != null)
@@ -61,7 +60,74 @@ namespace Crawler
       }
       JsonFileHelper.WriteJsonFile("Data.json", JsonConvert.SerializeObject(movieList));
       JsonFileHelper.WriteJsonFile("Download.json", JsonConvert.SerializeObject(downloadList));
-      return "done";
+      return "full grab done Total:" + movieList.Count.ToString();
+    }
+
+    public string UpdateAinunuContent()
+    {
+      var JsonFileHelper = new JsonFileHelper();
+      string exsistMoives = JsonFileHelper.ReadJsonFile("Data.json");
+      string exsistDownloads = JsonFileHelper.ReadJsonFile("Download.json");
+      var tempMoives = JsonConvert.DeserializeObject<List<AinunuMovieDTO>>(exsistMoives);
+      var tempDownloads = JsonConvert.DeserializeObject<List<AinunuDownloadDTO>>(exsistDownloads);
+      //tempMoives.Sort((x, y) => x.Id.CompareTo(y.Id) > 0 ? 1 : -1);
+
+      Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+      var movieList = new List<AinunuMovieDTO>();
+      var downloadList = new List<AinunuDownloadDTO>();
+      for (int i = 1; i <= 2; i++)//410 total -- 2022/1/2 TODO:动态读取总页数
+      {
+        var breakFlag = false;
+        var url = baseUrl + "/c/movie/list_" + i.ToString() + ".html";
+        var helper = new CrawlerHelper();
+        var html = helper.DownloadHtml(url, Encoding.GetEncoding("GB2312"));
+        if (html == "") break;
+        HtmlNodeCollection nodes = GetMovieList(html);
+
+        for (int j = 0; j < nodes.Count; j++)
+        {
+          HtmlNode node = nodes[j].SelectSingleNode("child::a[2]");
+          string movieCategory = nodes[j].SelectSingleNode("child::a[1]").InnerHtml;
+          string movieUpdateTime = nodes[j].SelectSingleNode("child::span").InnerHtml;
+          string detaiRelativelUrl = node.GetAttributeValue("href", "");
+          string movieDetailPageUrl = baseUrl + detaiRelativelUrl;
+          Id -= 1;
+          var urlName = node.InnerHtml;
+          Console.WriteLine(urlName);
+          if (tempMoives.Exists(x => x.UrlName == urlName))
+          {
+            breakFlag = true;
+            break;
+          }
+          try
+          {
+            var detail = GetMovieDetail(movieDetailPageUrl, Id);
+            if (detail.movie != null)
+            {
+              detail.movie.UpdateDate = movieUpdateTime;
+              detail.movie.Category = movieCategory;
+              detail.movie.UrlName = urlName;
+              movieList.Add(detail.movie);
+              var download = GetMovieDownloadDetail(detail.movie.DownloadUrl, detail.downloadNodes, detail.movie.Name, Id);
+              if (download != null)
+              {
+
+                downloadList.Add(download);
+              }
+            }
+          }
+          catch (Exception ex)
+          {
+            LogHelper.Error(string.Format(ex.Message + " " + node.InnerHtml), ex);
+          }
+        }
+        if (breakFlag) break;
+      }
+      var newMovieList = movieList.Concat(tempMoives).ToList();
+      var newDownloadList = downloadList.Concat(tempDownloads).ToList();
+      JsonFileHelper.WriteJsonFile("New-Data.json", JsonConvert.SerializeObject(newMovieList));
+      JsonFileHelper.WriteJsonFile("New-Download.json", JsonConvert.SerializeObject(newDownloadList));
+      return "Update grab done Total:" + movieList.Count.ToString();
     }
 
     public HtmlNodeCollection GetMovieList(string htmlContent)
@@ -201,6 +267,7 @@ namespace Crawler
     public string UpdateDate { get; set; }
     public string CreateDate { get; set; }
     public string Category { get; set; }
+    public string UrlName { get; set; }
   }
 
   public class AinunuDownloadDTO
