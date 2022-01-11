@@ -17,11 +17,22 @@ namespace Crawler
       Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
       var movieList = new List<AinunuMovieDTO>();
       var downloadList = new List<AinunuDownloadDTO>();
-      for (int i = 1; i <= 410; i++)//410 total -- 2022/1/2 TODO:动态读取总页数
+
+      var totalPageUrl = baseUrl + "/c/movie/";
+      var helper = new CrawlerHelper();
+      var html = helper.DownloadHtml(totalPageUrl, Encoding.GetEncoding("GB2312"));
+      HtmlDocument document = new HtmlDocument();
+      document.LoadHtml(html);
+      HtmlNode totalPage = document.DocumentNode.SelectSingleNode("/html/body/div[4]/div[1]/div[3]/div/ul/li[15]/span/strong[1]");
+      var totalPageCount = int.Parse(totalPage.InnerText);
+      HtmlNode totalMovies = document.DocumentNode.SelectSingleNode("/html/body/div[4]/div[1]/div[3]/div/ul/li[15]/span/strong[2]");
+      Id = int.Parse(totalMovies.InnerText);
+
+
+      for (int i = 1; i <= totalPageCount; i++)//410 total -- 2022/1/2 TODO:动态读取总页数
       {
         var url = baseUrl + "/c/movie/list_" + i.ToString() + ".html";
-        var helper = new CrawlerHelper();
-        var html = helper.DownloadHtml(url, Encoding.GetEncoding("GB2312"));
+        html = helper.DownloadHtml(url, Encoding.GetEncoding("GB2312"));
         if (html == "") break;
         HtmlNodeCollection nodes = GetMovieList(html);
 
@@ -66,8 +77,8 @@ namespace Crawler
     public string UpdateAinunuContent()
     {
       var JsonFileHelper = new JsonFileHelper();
-      string exsistMoives = JsonFileHelper.ReadJsonFile("Data.json");
-      string exsistDownloads = JsonFileHelper.ReadJsonFile("Download.json");
+      string exsistMoives = JsonFileHelper.ReadJsonFile("New-Data.json");
+      string exsistDownloads = JsonFileHelper.ReadJsonFile("New-Download.json");
       var tempMoives = JsonConvert.DeserializeObject<List<AinunuMovieDTO>>(exsistMoives);
       var tempDownloads = JsonConvert.DeserializeObject<List<AinunuDownloadDTO>>(exsistDownloads);
       //tempMoives.Sort((x, y) => x.Id.CompareTo(y.Id) > 0 ? 1 : -1);
@@ -75,12 +86,22 @@ namespace Crawler
       Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
       var movieList = new List<AinunuMovieDTO>();
       var downloadList = new List<AinunuDownloadDTO>();
-      for (int i = 1; i <= 2; i++)//410 total -- 2022/1/2 TODO:动态读取总页数
+
+      var totalPageUrl = baseUrl + "/c/movie/";
+      var helper = new CrawlerHelper();
+      var html = helper.DownloadHtml(totalPageUrl, Encoding.GetEncoding("GB2312"));
+      HtmlDocument document = new HtmlDocument();
+      document.LoadHtml(html);
+      HtmlNode totalPage = document.DocumentNode.SelectSingleNode("/html/body/div[4]/div[1]/div[3]/div/ul/li[15]/span/strong[1]");
+      var totalPageCount = int.Parse(totalPage.InnerText);
+      HtmlNode totalMovies = document.DocumentNode.SelectSingleNode("/html/body/div[4]/div[1]/div[3]/div/ul/li[15]/span/strong[2]");
+      Id = int.Parse(totalMovies.InnerText);
+
+      for (int i = 1; i <= totalPageCount; i++)//410 total -- 2022/1/2 TODO:动态读取总页数
       {
         var breakFlag = false;
         var url = baseUrl + "/c/movie/list_" + i.ToString() + ".html";
-        var helper = new CrawlerHelper();
-        var html = helper.DownloadHtml(url, Encoding.GetEncoding("GB2312"));
+        html = helper.DownloadHtml(url, Encoding.GetEncoding("GB2312"));
         if (html == "") break;
         HtmlNodeCollection nodes = GetMovieList(html);
 
