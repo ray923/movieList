@@ -80,7 +80,7 @@ export default function Home(props) {
 
   function renderSearchBar() {
     return (
-    <div>
+    <div style={{ "mixBlendMode": "difference"}}>
       <CustomInput
           white
           inputRootCustomClasses={search_classes.inputRootCustomClasses}
