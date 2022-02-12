@@ -77,8 +77,8 @@ namespace Crawler
     public string UpdateAinunuContent()
     {
       var JsonFileHelper = new JsonFileHelper();
-      string exsistMoives = JsonFileHelper.ReadJsonFile("New-Data.json");
-      string exsistDownloads = JsonFileHelper.ReadJsonFile("New-Download.json");
+      string exsistMoives = JsonFileHelper.ReadJsonFile("Data.json");
+      string exsistDownloads = JsonFileHelper.ReadJsonFile("Download.json");
       var tempMoives = JsonConvert.DeserializeObject<List<AinunuMovieDTO>>(exsistMoives);
       var tempDownloads = JsonConvert.DeserializeObject<List<AinunuDownloadDTO>>(exsistDownloads);
       //tempMoives.Sort((x, y) => x.Id.CompareTo(y.Id) > 0 ? 1 : -1);
@@ -146,8 +146,10 @@ namespace Crawler
       }
       var newMovieList = movieList.Concat(tempMoives).ToList();
       var newDownloadList = downloadList.Concat(tempDownloads).ToList();
-      JsonFileHelper.WriteJsonFile("New-Data.json", JsonConvert.SerializeObject(newMovieList));
-      JsonFileHelper.WriteJsonFile("New-Download.json", JsonConvert.SerializeObject(newDownloadList));
+      JsonFileHelper.WriteJsonFile("Data.json", JsonConvert.SerializeObject(newMovieList));
+      JsonFileHelper.WriteJsonFile("Download.json", JsonConvert.SerializeObject(newDownloadList));
+      JsonFileHelper.WriteJsonFile("../FrontEnd/src/data/movie.json", JsonConvert.SerializeObject(newMovieList));
+      JsonFileHelper.WriteJsonFile("../FrontEnd/src/data/download.json", JsonConvert.SerializeObject(newDownloadList));
       return "Update grab done Total:" + movieList.Count.ToString();
     }
 

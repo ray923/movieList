@@ -9,6 +9,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
+import { HTMLDecode } from "../../utils/helper.js";
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/teamStyle.js";
 
@@ -22,17 +23,17 @@ export default function ContentSection(props) {
     classes.imgFluid
   );
 
-  function HTMLDecode(text) { 
-    var temp = document.createElement("div"); 
-    temp.innerHTML = text; 
-    var output = temp.innerText || temp.textContent; 
-    temp = null; 
-    return output; 
-  } 
+  // function HTMLDecode(text) { 
+  //   var temp = document.createElement("div"); 
+  //   temp.innerHTML = text; 
+  //   var output = temp.innerText || temp.textContent; 
+  //   temp = null; 
+  //   return output; 
+  // } 
 
   return (
     <div className={classes.section}>
-      <h2 className={classes.title}>{props.Movie.Name}{props.Movie.SubName}  {props.Movie.SubTitle}</h2>
+      <h2 className={classes.title}>{HTMLDecode(props.Movie.Name)}{props.Movie.SubName}  {props.Movie.SubTitle}</h2>
       <h4 className={classes.title} >{props.Movie.UpdateDate}</h4>
       <div>
         <GridContainer>

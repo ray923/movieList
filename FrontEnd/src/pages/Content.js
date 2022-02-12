@@ -5,7 +5,8 @@ import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
-
+import {useTranslation} from 'react-i18next';
+import { HTMLDecode } from "../utils/helper.js";
 // @material-ui/icons
 
 // core components
@@ -22,11 +23,11 @@ import ContentSection from "./Sections/ContentSection.js";
 
 import Movies from "data/movie.json";
 
-//const dashboardRoutes = ["/Home"];
 
 const useStyles = makeStyles(styles);
 
 export default function Content(props) {
+  const { t } = useTranslation();
   const classes = useStyles();
   const { ...rest } = props;
   const [movie,setMovie] = useState(null);
@@ -37,16 +38,16 @@ export default function Content(props) {
     }, [props.location.pathname]);// eslint-disable-line react-hooks/exhaustive-deps
 
   const LeftLinks = <Tooltip
-    title="返回首页"
+    title={t('Back')}
     placement="left"
     classes={{ tooltip: classes.tooltip }}
   >
     <Button
       color="transparent"
-      href="/#/"
+      href="/"
       className={classes.navLink}
     >
-      <i className={classes.socialIcons + " fas fa-arrow-left"} /> Back
+      <i className={classes.socialIcons + " fas fa-arrow-left"} /> {t('Back')}
     </Button>
   </Tooltip>;
 
@@ -55,7 +56,7 @@ export default function Content(props) {
       {movie && (<><Header
         color="transparent"
         //routes={dashboardRoutes}
-        brand={movie.Name}
+        brand={HTMLDecode(movie.Name)}
         rightLinks={<HeaderLinks />}
         leftLinks={LeftLinks}
         fixed
@@ -79,7 +80,7 @@ export default function Content(props) {
           <ContentSection 
             Movie={movie}
           />
-          <Button target="_blank" color="primary" href={`/#/D/` + movie.Id}>Go to Downlaod</Button>
+          {/* <Button target="_blank" color="primary" href={`/D/` + movie.Id}>Go to Downlaod</Button> */}
           <Button target="_blank" color="primary" href={movie.DownloadUrl}>Go to Downlaod</Button>
         </div>
       </div>

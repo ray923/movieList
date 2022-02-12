@@ -1,35 +1,25 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {Route, HashRouter } from "react-router-dom";
+import { Router, Switch, Route } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import './i18n';
 import "assets/scss/material-kit-react.scss?v=1.9.0";
 
-// pages for this product
-// import Components from "views/Components/Components.js";
-// import LandingPage from "views/LandingPage/LandingPage.js";
-// import ProfilePage from "views/ProfilePage/ProfilePage.js";
-// import LoginPage from "views/LoginPage/LoginPage.js";
 import Home from "pages/Home.js";
 import Cate from "pages/Category.js";
 import Download from "pages/Download.js";
 import Content from "pages/Content.js";
 
+var hist = createBrowserHistory();
+
 ReactDOM.render(
-  // <Router history={hist}>
-  //   <Switch>
-  //     {/* <Route path="/landing-page" component={LandingPage} />
-  //     <Route path="/profile-page" component={ProfilePage} />
-  //     <Route path="/login-page" component={LoginPage} /> */}
-  //     <Route path="/content" component={Content}/>
-  //     <Route path="/download" component={Dowlaod} />
-  //     <Route path="/" component={Home} exact/>
-  //     {/* <Route path="/" component={Components} /> */}
-  //   </Switch>
-  // </Router>,
-  <HashRouter>
-    <Route exact path='/' component={Home} />
-    <Route exact path='/Cat/:catId' component={Cate} />
-    <Route exact path='/D/:movieId' component={Download} />
-    <Route exact path='/content/:movieId' component={Content} />
-  </HashRouter>,
+  <Router history={hist}>
+    <Switch>
+      <Route exact path='/' component={Home} />
+      <Route exact path='/Cat/:catId' component={Cate} />
+      <Route exact path='/D/:movieId' component={Download} />
+      <Route exact path='/content/:movieId' component={Content} />
+    </Switch>
+  </Router>,
   document.getElementById("root")
 );

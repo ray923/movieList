@@ -19,6 +19,9 @@ import CustomInput from 'components/CustomInput/CustomInput.js';
 import Button from "components/CustomButtons/Button.js";
 import Card from './HomeComponent/Card';
 
+import { HTMLDecode } from "../utils/helper.js";
+import {useTranslation} from 'react-i18next';
+
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 import search_styles from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.js";
@@ -28,6 +31,7 @@ const useStyles = makeStyles(styles);
 const useSearch_Styles = makeStyles(search_styles);
 
 export default function Home(props) {
+  const { t } = useTranslation();
   const classes = useStyles();
   const search_classes = useSearch_Styles();
   const { ...rest } = props;
@@ -69,7 +73,7 @@ export default function Home(props) {
         <GridItem xs={2} className={classNames(classes.cardMargin)} key={item.Id}>
             <Card
               Id={item.Id}
-              Name={item.Name}
+              Name={HTMLDecode(item.Name)}
               ListImgUrl={item.ListImgUrl}
               SubTitle={item.SubTitle}
             ></Card>
@@ -88,7 +92,7 @@ export default function Home(props) {
             className: search_classes.formControl,
           }}
           inputProps={{
-            placeholder: "Search",
+            placeholder: t('Search'),
             inputProps: {
               "aria-label": "Search",
               className: search_classes.searchInput,
@@ -106,7 +110,7 @@ export default function Home(props) {
   return (
     <div>
       <Header
-        brand="Movie List Demo"
+        brand={t('SiteName')}
         searchBar={renderSearchBar()}
         rightLinks={<HeaderLinks />}
         fixed
@@ -117,15 +121,13 @@ export default function Home(props) {
         }}
         {...rest}
       />
-      <Parallax image={require("assets/img/bg4.jpg")}>
+      <Parallax image={require("assets/img/profile-bg.jpg")}>
         <div className={classes.container}>
           <GridContainer>
             <GridItem>
               <div className={classes.brand}>
-                <h1 className={classes.title}>Ads.</h1>
-                <h3 className={classes.subtitle}>
-                  here is an Ads.
-                </h3>
+                <h1 className={classes.title}></h1>
+                <h3 className={classes.subtitle}></h3>
               </div>
             </GridItem>
           </GridContainer>

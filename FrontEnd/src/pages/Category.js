@@ -22,12 +22,14 @@ import Card from './HomeComponent/Card';
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 import search_styles from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.js";
+import {useTranslation} from 'react-i18next';
 import movies from "data/movie.json";
 
 const useStyles = makeStyles(styles);
 const useSearch_Styles = makeStyles(search_styles);
 
 export default function Category(props) {
+  const { t } = useTranslation();
   const classes = useStyles();
   const search_classes = useSearch_Styles();
   const { ...rest } = props;
@@ -110,9 +112,9 @@ export default function Category(props) {
             className: search_classes.formControl,
           }}
           inputProps={{
-            placeholder: "Search",
+            placeholder: t('Search'),
             inputProps: {
-              "aria-label": "Search",
+              "aria-label": t('Search'),
               className: search_classes.searchInput,
             },
           }}
@@ -128,7 +130,7 @@ export default function Category(props) {
   return (
     <div>
       <Header
-        brand="Movie List Demo"
+        brand={t('SiteName')}
         searchBar={renderSearchBar()}
         rightLinks={<HeaderLinks />}
         fixed
@@ -139,15 +141,13 @@ export default function Category(props) {
         }}
         {...rest}
       />
-      <Parallax image={require("assets/img/bg4.jpg")}>
+      <Parallax image={require("assets/img/landing-bg.jpg")}>
         <div className={classes.container}>
           <GridContainer>
             <GridItem>
               <div className={classes.brand}>
-                <h1 className={classes.title}>Ads.</h1>
-                <h3 className={classes.subtitle}>
-                  here is an Ads.
-                </h3>
+                <h1 className={classes.title}></h1>
+                <h3 className={classes.subtitle}></h3>
               </div>
             </GridItem>
           </GridContainer>

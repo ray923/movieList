@@ -17,19 +17,21 @@ import { Apps, CloudDownload } from "@material-ui/icons";
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
 import Button from "components/CustomButtons/Button.js";
+import { useTranslation } from 'react-i18next';
 
 import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
 
 const useStyles = makeStyles(styles);
 
 export default function HeaderLinks(props) {
+  const { t } = useTranslation();
   const classes = useStyles();
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
         <CustomDropdown
           noLiPadding
-          buttonText="所有电影分类"
+          buttonText={t('AllCategories')}
           buttonProps={{
             className: classes.navLink,
             color: "transparent"
@@ -37,28 +39,21 @@ export default function HeaderLinks(props) {
           buttonIcon={Apps}
           dropdownList={[
             <Link to="/" className={classes.dropdownLink}>
-              所有电影
+              {t('AllMovies')}
             </Link>,
             <Link to="/Cat/1" className={classes.dropdownLink}>
-              欧美电影
+              {t('WesternMovies')}
             </Link>,
             <Link to="/Cat/2" className={classes.dropdownLink}>
-              日韩电影
+              {t('AsianMovies')}
             </Link>,
             <Link to="/Cat/3" className={classes.dropdownLink}>
-              内地电影
+              {t('ChineseMovies')}
             </Link>
-            // <a
-            //   href="https://creativetimofficial.github.io/material-kit-react/#/documentation?ref=mkr-navbar"
-            //   target="_blank"
-            //   className={classes.dropdownLink}
-            // >
-            //   其他电影
-            // </a>
           ]}
         />
       </ListItem>
-      <ListItem className={classes.listItem}>
+      {/* <ListItem className={classes.listItem}>
         <Button
           href="https://www.mac-downloader.com/"
           color="transparent"
@@ -67,8 +62,8 @@ export default function HeaderLinks(props) {
         >
           <CloudDownload className={classes.icons} /> 下载器
         </Button>
-      </ListItem>
-      <ListItem className={classes.listItem}>
+      </ListItem> */}
+      {/* <ListItem className={classes.listItem}>
         <Tooltip
           id="instagram-facebook"
           title="邮箱:gmail.com"
@@ -84,7 +79,7 @@ export default function HeaderLinks(props) {
             <i className={classes.socialIcons + " far fa-envelope"} />
           </Button>
         </Tooltip>
-      </ListItem>
+      </ListItem> */}
       {/* <ListItem className={classes.listItem}>
         <Tooltip
           id="instagram-tooltip"
