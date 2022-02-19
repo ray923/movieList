@@ -9,9 +9,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/BackEnd/bin/Debug/net5.0/BackEnd.dll",
+      "program": "${workspaceFolder}/Crawler/bin/Debug/net5.0/Crawler.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/BackEnd",
+      "cwd": "${workspaceFolder}/Crawler",
       "console": "internalConsole",
       "stopAtEntry": false
     },
