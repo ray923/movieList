@@ -84,7 +84,6 @@ namespace Crawler
           string movieUpdateTime = nodes[j].SelectSingleNode("child::span").InnerHtml;
           string detaiRelativelUrl = node.GetAttributeValue("href", "");
           string movieDetailPageUrl = baseUrl + detaiRelativelUrl;
-          Id -= 1;
           var urlName = node.InnerHtml;
           Console.WriteLine(urlName);
           if (tempMoives.Exists(x => x.UrlName == urlName) && switcher == 2)
@@ -115,6 +114,7 @@ namespace Crawler
           {
             LogHelper.Error(string.Format(ex.Message + " " + node.InnerHtml), ex);
           }
+          Id -= 1;
         }
         if (breakFlag) break;
       }
