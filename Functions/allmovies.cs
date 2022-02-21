@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Cosmos;
 using System.Collections.Generic;
+using Movie.Functions.Data;
 using Newtonsoft.Json;
 
 namespace Movies.Function
@@ -60,26 +61,5 @@ namespace Movies.Function
       log.LogInformation(String.Format("C# HTTP trigger function processed a request. Page: {0}; Movies: {1}", page, movies.Count));
       return new OkObjectResult(movies.Skip(pageSize * (int.Parse(page) - 1)).Take(pageSize).ToList());
     }
-  }
-
-  public class AinunuMovieDTO
-  {
-    public string id { get; set; }
-    public int MovieId { get; set; }
-    public string Name { get; set; }
-    public string ListImgUrl { get; set; }
-    public string SubTitle { get; set; }
-    public string ContentTitle { get; set; }
-    public string ImgUrl { get; set; }
-    public string Introduction { get; set; }
-    public string DownloadUrl { get; set; }
-    public string Overview { get; set; }
-    public string Caption { get; set; }
-    public string Format { get; set; }
-    public string UpdateDate { get; set; }
-    public string CreateDate { get; set; }
-    public string Category { get; set; }
-    public string partitionKey { get; set; }
-    public string UrlName { get; set; }
   }
 }

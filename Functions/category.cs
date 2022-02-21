@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Cosmos;
 using System.Collections.Generic;
+using Movie.Functions.Data;
 using Newtonsoft.Json;
 
 namespace Movies.Function
@@ -57,7 +58,7 @@ namespace Movies.Function
         default:
           break;
       }
-      var sqlQueryText = String.Format("SELECT * FROM c where partitionKey = '{0}'", partitionKey);
+      var sqlQueryText = String.Format("SELECT * FROM c where c.partitionKey = '{0}'", partitionKey);
       QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
       FeedIterator<AinunuMovieDTO> queryResultSetIterator = container.GetItemQueryIterator<AinunuMovieDTO>(queryDefinition);
 

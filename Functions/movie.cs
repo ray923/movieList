@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Cosmos;
 using System.Collections.Generic;
+using Movie.Functions.Data;
 using Newtonsoft.Json;
 
 namespace Movies.Function
@@ -42,7 +43,7 @@ namespace Movies.Function
       database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
       container = await database.CreateContainerIfNotExistsAsync(containerId, "/partitionKey");
 
-      var sqlQueryText = String.Format("SELECT * FROM c where id = {0}", id);
+      var sqlQueryText = String.Format("SELECT * FROM c where c.id = \"{0}\"", id);
       QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
       FeedIterator<AinunuMovieDTO> queryResultSetIterator = container.GetItemQueryIterator<AinunuMovieDTO>(queryDefinition);
 
@@ -51,7 +52,7 @@ namespace Movies.Function
       while (queryResultSetIterator.HasMoreResults)
       {
         FeedResponse<AinunuMovieDTO> currentResultSet = await queryResultSetIterator.ReadNextAsync();
-        foreach (AinunuMovieDTO movie in currentResultSet)
+        foreach (var movie in currentResultSet)
         {
           movies.Add(movie);
         }
