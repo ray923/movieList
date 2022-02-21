@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace Movies.Function
 {
-  public static class movie
+  public static class download
   {
     private static readonly string EndpointUri = "https://ray-movie.documents.azure.com:443/";
     private static readonly string PrimaryKey = "qDEJv6fymsPZpMro2iAOKvEZm0vb22RfqbOpVMDK1Y57AI1O8dpTL46H5jtGIZXJTE8r3pPPb28gQ64fzwBYcw==";
@@ -26,9 +26,9 @@ namespace Movies.Function
     private static Container container;
     // The name of the database and container we will create
     private static string databaseId = "Movies";
-    private static string containerId = "Details";
+    private static string containerId = "Downloads";
 
-    [FunctionName("movie")]
+    [FunctionName("download")]
     public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
@@ -45,19 +45,19 @@ namespace Movies.Function
 
       var sqlQueryText = String.Format("SELECT * FROM c where c.id = '{0}'", id);
       QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
-      FeedIterator<AinunuMovieDTO> queryResultSetIterator = container.GetItemQueryIterator<AinunuMovieDTO>(queryDefinition);
+      FeedIterator<AinunuDownloadDTO> queryResultSetIterator = container.GetItemQueryIterator<AinunuDownloadDTO>(queryDefinition);
 
-      List<AinunuMovieDTO> movies = new List<AinunuMovieDTO>();
+      List<AinunuDownloadDTO> movies = new List<AinunuDownloadDTO>();
 
       while (queryResultSetIterator.HasMoreResults)
       {
-        FeedResponse<AinunuMovieDTO> currentResultSet = await queryResultSetIterator.ReadNextAsync();
+        FeedResponse<AinunuDownloadDTO> currentResultSet = await queryResultSetIterator.ReadNextAsync();
         foreach (var movie in currentResultSet)
         {
           movies.Add(movie);
         }
       }
-      log.LogInformation(String.Format("C# HTTP trigger function processed a request. Id: {0}; Name: {1}", id, movies.FirstOrDefault().Name));
+      log.LogInformation(String.Format("C# HTTP trigger function processed a request. Id: {0}; Name: {1}", id, movies.FirstOrDefault().MovieName));
 
       return new OkObjectResult(movies.FirstOrDefault());
     }

@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace Movies.Function
 {
-  public static class movie
+  public static class search
   {
     private static readonly string EndpointUri = "https://ray-movie.documents.azure.com:443/";
     private static readonly string PrimaryKey = "qDEJv6fymsPZpMro2iAOKvEZm0vb22RfqbOpVMDK1Y57AI1O8dpTL46H5jtGIZXJTE8r3pPPb28gQ64fzwBYcw==";
@@ -27,23 +27,18 @@ namespace Movies.Function
     // The name of the database and container we will create
     private static string databaseId = "Movies";
     private static string containerId = "Details";
+    private static int pageSize = 48;
 
-    [FunctionName("movie")]
+    [FunctionName("search")]
     public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
     {
-      string id = req.Query["id"];
-      string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-      dynamic data = JsonConvert.DeserializeObject(requestBody);
-      id = id ?? data?.id;
-
       cosmosClient = new CosmosClient(EndpointUri, PrimaryKey, new CosmosClientOptions() { ApplicationName = "CosmosDBDotnetQuickstart" });
       // Create a new database
       database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
       container = await database.CreateContainerIfNotExistsAsync(containerId, "/partitionKey");
-
-      var sqlQueryText = String.Format("SELECT * FROM c where c.id = '{0}'", id);
+      var sqlQueryText = "SELECT * FROM c";
       QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
       FeedIterator<AinunuMovieDTO> queryResultSetIterator = container.GetItemQueryIterator<AinunuMovieDTO>(queryDefinition);
 
@@ -52,14 +47,23 @@ namespace Movies.Function
       while (queryResultSetIterator.HasMoreResults)
       {
         FeedResponse<AinunuMovieDTO> currentResultSet = await queryResultSetIterator.ReadNextAsync();
-        foreach (var movie in currentResultSet)
+        foreach (AinunuMovieDTO movie in currentResultSet)
         {
           movies.Add(movie);
         }
       }
-      log.LogInformation(String.Format("C# HTTP trigger function processed a request. Id: {0}; Name: {1}", id, movies.FirstOrDefault().Name));
+      string keyword = req.Query["keyword"];
+      var result = movies.FindAll(x => x.Name.ToLower().Contains(keyword.ToLower())
+        || x.Introduction.ToLower().Contains(keyword.ToLower())
+        || x.Overview.ToLower().Contains(keyword.ToLower()));
+      string page = req.Query["page"];
 
-      return new OkObjectResult(movies.FirstOrDefault());
+      string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+      dynamic data = JsonConvert.DeserializeObject(requestBody);
+      page = page ?? data?.page;
+
+      log.LogInformation(String.Format("C# HTTP trigger function processed a request. Page: {0}; Movies: {1}", page, result.Count));
+      return new OkObjectResult(result.Skip(pageSize * (int.Parse(page) - 1)).Take(pageSize).ToList());
     }
   }
 }
