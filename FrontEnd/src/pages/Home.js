@@ -25,8 +25,7 @@ import {useTranslation} from 'react-i18next';
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 import search_styles from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.js";
-import { getAllMovies } from "../actions/index.js";
-import movies from "data/movie.json";
+import { getAllMovies, search } from "../actions/index.js";
 
 const useStyles = makeStyles(styles);
 const useSearch_Styles = makeStyles(search_styles);
@@ -37,13 +36,24 @@ export default function Home(props) {
   const search_classes = useSearch_Styles();
   const { ...rest } = props;
   const [loadedMoives, setLoadedMoives] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
-  const numberPerLoad = 30;
+  const [hasMore, setHasMore] = useState(true);
+
+  const [searchInput, setSearchInput] = useState("");
+  const [loadedSearch, setLoadedSearch] = useState([]);
+  const [pageNumberSearch, setPageNumberSearch] = useState(1);
+  const [hasMoreSearch, setHasMoreSearch] = useState(true);
+  const [doSearch, setDoSearch] = useState(false);
 
   const fetchMoreData = async () => {
     var loadedMovieList = await getAllMovies(pageNumber);
-    console.log(loadedMovieList);
+    if (loadedMovieList.length === 0 || loadedMovieList.length < 48) {
+      setHasMore(false);
+    }
+    else
+    {
+      setHasMore(true);
+    }
     setLoadedMoives([...loadedMoives, ...loadedMovieList]);
     setPageNumber(pageNumber + 1);
   }
@@ -53,24 +63,54 @@ export default function Home(props) {
     fetchMoreData();
   }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
-  var searchMovie = () => { 
-    console.log(searchInput);
+  useEffect(() => { 
+    if (searchInput.length === 0)
+    {
+      setDoSearch(false);
+    }
+  }, [searchInput]);
+
+  var searchMovie = async () => { 
     if (searchInput.length > 0) {
-      var searchResult = movies.filter((movie) => {
-        return ((movie.Name && movie.Name.toLowerCase().includes(searchInput.toLowerCase())));
-          //|| (movie.SubTitle && movie.SubTitle.toLowerCase().includes(searchInput.toLowerCase()))
-          //|| (movie.Introduction && movie.Introduction.toLowerCase().includes(searchInput.toLowerCase()))
-          //|| (movie.Overview && movie.Overview.toLowerCase().includes(searchInput.toLowerCase()));
-      });
-      setLoadedMoives([...searchResult]);
-    } else { 
-      var loadedMovieList = movies.slice(0, numberPerLoad);
-      setLoadedMoives([...loadedMovieList]);
+      setDoSearch(true);
+      var searchResult = await search(searchInput, pageNumberSearch);
+      if (searchResult.length === 0 || searchResult.length < 48) {
+        setHasMoreSearch(false);
+      }
+      else
+      {
+        setHasMoreSearch(true);
+      }
+      setLoadedSearch([...loadedSearch, ...searchResult]);
+      setPageNumberSearch(pageNumberSearch + 1);
+    } else {
+      setDoSearch(false);
+      setPageNumber(1);
+      setHasMore(true);
+      setLoadedMoives([]);
+      setPageNumberSearch(1);
+      setHasMoreSearch(true);
+      setLoadedSearch([]);
+      fetchMoreData();
     }
   }
 
   function RenderMovieCards() {
-    return loadedMoives.map((item) => {
+    return doSearch ?
+    loadedSearch.map((item) => {
+      return (
+        <GridItem xs={2} className={classNames(classes.cardMargin)} key={item.id}>
+            <Card
+              Id={item.id}
+              Name={HTMLDecode(item.name)}
+              ListImgUrl={item.listImgUrl}
+              SubTitle={item.subTitle}
+            ></Card>
+        </GridItem>
+      )
+    })
+    :
+    loadedMoives.map((item) => {
       return (
         <GridItem xs={2} className={classNames(classes.cardMargin)} key={item.id}>
             <Card
@@ -137,9 +177,9 @@ export default function Home(props) {
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
         <InfiniteScroll
-          dataLength={loadedMoives.length}
-          next={fetchMoreData}
-          hasMore={searchInput.length > 0 ? false : movies.length > loadedMoives.length ? true : false}
+          dataLength={doSearch ? loadedSearch.length : loadedMoives.length}
+          next={doSearch > 0 ? searchMovie : fetchMoreData}
+          hasMore={doSearch > 0 ? hasMoreSearch : hasMore}
           loader={<div style={{textAlign:"center"}}><h4>Loading...</h4></div>}
           endMessage={<div style={{textAlign:"center"}}><h4>End</h4></div>}
         >
