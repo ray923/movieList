@@ -8,6 +8,7 @@ import GridItem from "components/Grid/GridItem.js";
 import Paper from '@material-ui/core/Paper';
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/productStyle.js";
+import { HTMLDecode } from "../../utils/helper.js";
 import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles(styles);
@@ -15,30 +16,22 @@ const useStyles = makeStyles(styles);
 export default function Download(props) {
   const classes = useStyles();
 
-  function HTMLDecode(text) { 
-    var temp = document.createElement("div"); 
-    temp.innerHTML = text; 
-    var output = temp.innerText || temp.textContent; 
-    temp = null; 
-    return output; 
-  } 
-
   function RenderResources() {
-    if(props.Download.Resources)
+    if(props.Download.resources)
     {
       return (
         <GridItem xs={12} sm={12} md={12}>
-          {props.Download.Resources.map((item) => {
+          {props.Download.resources.map((item) => {
             return (
               <>
-                <h4 className={classes.title}>{item.FormatName}</h4>
+                <h4 className={classes.title}>{item.formatName}</h4>
                 <Paper 
                   elevation={3}
                   children=
                   {
-                    item.ResourceLinks.map((resource) => {
+                    item.resourceLinks.map((resource) => {
                       return (
-                          <><Button color="primary" href={resource.Url}>{resource.Name}</Button>{HTMLDecode(resource.Others)}</>
+                          <><Button color="primary" href={resource.url}>{resource.name}</Button>{HTMLDecode(resource.others)}</>
                         )
                     })
                   }
@@ -53,7 +46,7 @@ export default function Download(props) {
 
   return (
     <div className={classes.section}>
-      <h2 className={classes.title}>{props.Download.MovieName}</h2>
+      <h2 className={classes.title}>{props.Download.movieName}</h2>
       <div>
         <GridContainer>
           {RenderResources()}

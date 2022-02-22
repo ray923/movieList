@@ -4,9 +4,6 @@ import { useState, useEffect } from "react"; // useState is a hook
 import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-
-// @material-ui/icons
-
 // core components
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
@@ -19,9 +16,7 @@ import styles from "assets/jss/material-kit-react/views/landingPage.js";
 
 // Sections for this page
 import DownloadSection from "./Sections/DownloadSection.js";
-
-//Data
-import Download from "data/download.json";
+import { getMovieDownload } from '../actions/index.js';
 
 const dashboardRoutes = [];
 
@@ -33,10 +28,12 @@ export default function Downlaod(props) {
   const [movie, setMovie] = useState([]);
 
   useEffect(() => { 
+    async function getDownload(id) {
+      const res = await getMovieDownload(id);
+      setMovie(res);
+    }
     const movieId = props.location.pathname.split('/')[2];
-    console.log(Download);
-    const download = Download.find((item) => item.MovieId.toString() === movieId);
-    setMovie(download);
+    getDownload(movieId);
   },[props.location.pathname]);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -44,7 +41,7 @@ export default function Downlaod(props) {
       <Header
         color="transparent"
         routes={dashboardRoutes}
-        brand= {movie.MovieName + ' Download'}
+        brand= {movie.movieName + ' Download'}
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{

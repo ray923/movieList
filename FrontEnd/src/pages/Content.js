@@ -20,8 +20,7 @@ import styles from "assets/jss/material-kit-react/views/landingPage.js";
 
 // Sections for this page
 import ContentSection from "./Sections/ContentSection.js";
-
-import Movies from "data/movie.json";
+import { getMovieDetail } from '../actions/index.js';
 
 
 const useStyles = makeStyles(styles);
@@ -33,8 +32,13 @@ export default function Content(props) {
   const [movie,setMovie] = useState(null);
   
   useEffect(() => {
+      async function getMovie(id) {
+        const res = await getMovieDetail(id);
+        console.log(res);
+        setMovie(res);
+      }
       const movieId = props.location.pathname.split('/')[2];
-      setMovie(Movies.find((item)=> item.Id.toString()===movieId));
+      getMovie(movieId);
     }, [props.location.pathname]);// eslint-disable-line react-hooks/exhaustive-deps
 
   const LeftLinks = <Tooltip
@@ -56,7 +60,7 @@ export default function Content(props) {
       {movie && (<><Header
         color="transparent"
         //routes={dashboardRoutes}
-        brand={HTMLDecode(movie.Name)}
+        brand={HTMLDecode(movie.name)}
         rightLinks={<HeaderLinks />}
         leftLinks={LeftLinks}
         fixed
@@ -66,14 +70,7 @@ export default function Content(props) {
         }}
         {...rest}
       />
-      <Parallax filter image={movie.ImgUrl}>
-        {/* <div className={classes.container}>
-          <GridContainer>
-            <GridItem xs={12} sm={12} md={6}>
-              <h1 className={classes.title}>{movie.Name}</h1>
-            </GridItem>
-          </GridContainer>
-        </div> */}
+      <Parallax filter image={movie.imgUrl}>
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
@@ -81,7 +78,7 @@ export default function Content(props) {
             Movie={movie}
           />
           {/* <Button target="_blank" color="primary" href={`/D/` + movie.Id}>Go to Downlaod</Button> */}
-          <Button target="_blank" color="primary" href={movie.DownloadUrl}>Go to Downlaod</Button>
+          <Button target="_blank" color="primary" href={movie.downloadUrl}>Go to Downlaod</Button>
         </div>
       </div>
       <Footer /></>)}

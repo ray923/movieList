@@ -23,29 +23,21 @@ export default function ContentSection(props) {
     classes.imgFluid
   );
 
-  // function HTMLDecode(text) { 
-  //   var temp = document.createElement("div"); 
-  //   temp.innerHTML = text; 
-  //   var output = temp.innerText || temp.textContent; 
-  //   temp = null; 
-  //   return output; 
-  // } 
-
   return (
     <div className={classes.section}>
-      <h2 className={classes.title}>{HTMLDecode(props.Movie.Name)}{props.Movie.SubName}  {props.Movie.SubTitle}</h2>
-      <h4 className={classes.title} >{props.Movie.UpdateDate}</h4>
+      <h2 className={classes.title}>{HTMLDecode(props.Movie.name)}{props.Movie.subName}  {props.Movie.subTitle}</h2>
+      <h4 className={classes.title} >{props.Movie.updateDate}</h4>
       <div>
         <GridContainer>
           <GridItem xs={12} sm={12} md={4}>
             <Card plain>
               <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
-                <img src={props.Movie.ImgUrl} alt="..." className={imageClasses} />
+                <img src={props.Movie.imgUrl} alt="..." className={imageClasses} />
               </GridItem>
               <CardBody>
-                <div className={classes.overView} dangerouslySetInnerHTML={{ __html: props.Movie.Overview }} />
+                <div className={classes.overView} dangerouslySetInnerHTML={{ __html: props.Movie.overview }} />
                 <p className={classNames(classes.title, classes.introduction)}>
-                {HTMLDecode(props.Movie.Introduction)}
+                {HTMLDecode(props.Movie.introduction)}
                 </p>
               </CardBody>
             </Card>

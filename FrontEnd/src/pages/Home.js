@@ -25,6 +25,7 @@ import {useTranslation} from 'react-i18next';
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 import search_styles from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.js";
+import { getAllMovies } from "../actions/index.js";
 import movies from "data/movie.json";
 
 const useStyles = makeStyles(styles);
@@ -37,13 +38,14 @@ export default function Home(props) {
   const { ...rest } = props;
   const [loadedMoives, setLoadedMoives] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [pageNumber, setPageNumber] = useState(1);
   const numberPerLoad = 30;
 
-  const fetchMoreData = () => {
-    var startIndex = loadedMoives.length;
-    var endIndex = startIndex + numberPerLoad;
-    var loadedMovieList = movies.slice(startIndex, endIndex);
+  const fetchMoreData = async () => {
+    var loadedMovieList = await getAllMovies(pageNumber);
+    console.log(loadedMovieList);
     setLoadedMoives([...loadedMoives, ...loadedMovieList]);
+    setPageNumber(pageNumber + 1);
   }
 
   useEffect(() => { 
@@ -70,12 +72,12 @@ export default function Home(props) {
   function RenderMovieCards() {
     return loadedMoives.map((item) => {
       return (
-        <GridItem xs={2} className={classNames(classes.cardMargin)} key={item.Id}>
+        <GridItem xs={2} className={classNames(classes.cardMargin)} key={item.id}>
             <Card
-              Id={item.Id}
-              Name={HTMLDecode(item.Name)}
-              ListImgUrl={item.ListImgUrl}
-              SubTitle={item.SubTitle}
+              Id={item.id}
+              Name={HTMLDecode(item.name)}
+              ListImgUrl={item.listImgUrl}
+              SubTitle={item.subTitle}
             ></Card>
         </GridItem>
       )
