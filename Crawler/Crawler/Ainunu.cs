@@ -122,8 +122,8 @@ namespace Crawler
       var newDownloadList = downloadList.Concat(tempDownloads).ToList();
       JsonFileHelper.WriteJsonFile("Data.json", JsonConvert.SerializeObject(newMovieList));
       JsonFileHelper.WriteJsonFile("Download.json", JsonConvert.SerializeObject(newDownloadList));
-      JsonFileHelper.WriteJsonFile("../FrontEnd/src/data/movie.json", JsonConvert.SerializeObject(newMovieList));
-      JsonFileHelper.WriteJsonFile("../FrontEnd/src/data/download.json", JsonConvert.SerializeObject(newDownloadList));
+      // JsonFileHelper.WriteJsonFile("../FrontEnd/src/data/movie.json", JsonConvert.SerializeObject(newMovieList));
+      // JsonFileHelper.WriteJsonFile("../FrontEnd/src/data/download.json", JsonConvert.SerializeObject(newDownloadList));
       return "grab done Total:" + movieList.Count.ToString();
     }
 

@@ -6,7 +6,7 @@ namespace BackEnd
 {
   class Program
   {
-    public static int switcher = 1;//1:get Ainunu full movie list, 2:update Ainunu movie list
+    public static int switcher = 2;//1:get Ainunu full movie list, 2:update Ainunu movie list
     static async Task Main(string[] args)
     {
       switch (switcher)
