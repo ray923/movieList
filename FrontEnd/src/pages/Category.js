@@ -15,123 +15,68 @@ import GridItem from "components/Grid/GridItem.js";
 import Parallax from "components/Parallax/Parallax.js";
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.js";
-import CustomInput from 'components/CustomInput/CustomInput.js';
-import Button from "components/CustomButtons/Button.js";
 import Card from './HomeComponent/Card';
 
+import { HTMLDecode } from "../utils/helper.js";
+import { useTranslation } from 'react-i18next';
 
 import styles from "assets/jss/material-kit-react/views/components.js";
-import search_styles from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.js";
-import {useTranslation} from 'react-i18next';
-import movies from "data/movie.json";
+import { getCategory } from "../actions/index.js";
 
 const useStyles = makeStyles(styles);
-const useSearch_Styles = makeStyles(search_styles);
 
 export default function Category(props) {
   const { t } = useTranslation();
   const classes = useStyles();
-  const search_classes = useSearch_Styles();
   const { ...rest } = props;
-  const [filteredMovies, setFilteredMovies] = useState([]);
   const [loadedMoives, setLoadedMoives] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
-  const numberPerLoad = 30;
+  const [pageNumber, setPageNumber] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
-  const fetchMoreData = () => {
-    var startIndex = loadedMoives.length;
-    var endIndex = startIndex + numberPerLoad;
-    var loadedMovieList = filteredMovies.slice(startIndex, endIndex);
-    setLoadedMoives([...loadedMoives, ...loadedMovieList]);
-  }
-
-  useEffect(() => { 
-    setSearchInput("");
-  }, []);// eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => { 
-    console.log(searchInput);
-    setSearchInput("");
-    setLoadedMoives([]);
-    var result = movies.filter((movie) => {
-      switch (props.location.pathname.split('/')[2]) {
-        case '1':
-          return movie.Category === "欧美";
-        case '2':
-          return movie.Category === '日韩';
-        case '3':
-          return movie.Category === '内地';
-        default:
-          return movie;
-      }
-    })
-    setFilteredMovies([...result]);
-  }, [props.location.pathname]);// eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => { 
-    fetchMoreData();
-  }, [filteredMovies]);// eslint-disable-line react-hooks/exhaustive-deps
-
-  var searchMovie = () => { 
-    if (searchInput.length > 0) {
-      var searchResult = filteredMovies.filter((movie) => {
-        return ((movie.Name && movie.Name.toLowerCase().includes(searchInput.toLowerCase())));
-          //|| (movie.SubTitle && movie.SubTitle.toLowerCase().includes(searchInput.toLowerCase()))
-          //|| (movie.Introduction && movie.Introduction.toLowerCase().includes(searchInput.toLowerCase()))
-          //|| (movie.Overview && movie.Overview.toLowerCase().includes(searchInput.toLowerCase()));
-      });
-      setLoadedMoives([...searchResult]);
-    } else { 
-      var loadedMovieList = filteredMovies.slice(0, numberPerLoad);
-      setLoadedMoives([...loadedMovieList]);
+  const fetchMoreData = async (init) => {
+    var loadedMovieList = await getCategory(props.location.pathname.split('/')[2], init? 1 : pageNumber);
+    if (loadedMovieList.length === 0 || loadedMovieList.length < 48) {
+      setHasMore(false);
+    }
+    else
+    {
+      setHasMore(true);
+    }
+    console.log(pageNumber);
+    setLoadedMoives((pre) => { return [...pre, ...loadedMovieList] });
+    if (!init) {
+      setPageNumber(pageNumber + 1);
+    } else {
+      setPageNumber(2);
     }
   }
+
+  useEffect(() => { 
+    setLoadedMoives([]);
+    setPageNumber(1);
+    fetchMoreData(true);
+  }, [props.location.pathname]);// eslint-disable-line react-hooks/exhaustive-deps
 
   function RenderMovieCards() {
     return loadedMoives.map((item) => {
       return (
-        <GridItem xs={2} className={classNames(classes.cardMargin)} key={item.Id}>
+        <GridItem xs={2} className={classNames(classes.cardMargin)} key={item.id}>
             <Card
-              Id={item.Id}
-              Name={item.Name}
-              ListImgUrl={item.ListImgUrl}
-              SubTitle={item.SubTitle}
+              Id={item.id}
+              Name={HTMLDecode(item.name)}
+              ListImgUrl={item.listImgUrl}
+              SubTitle={item.subTitle}
             ></Card>
         </GridItem>
       )
     })
   };
 
-  function renderSearchBar() {
-    return (
-    <div>
-      <CustomInput
-          white
-          inputRootCustomClasses={search_classes.inputRootCustomClasses}
-          formControlProps={{
-            className: search_classes.formControl,
-          }}
-          inputProps={{
-            placeholder: t('Search'),
-            inputProps: {
-              "aria-label": t('Search'),
-              className: search_classes.searchInput,
-            },
-          }}
-          onChangeValue={(e) => setSearchInput(e)}
-          searchValue={searchInput}
-      />
-      <Button justIcon round color="white" onClick = {() => searchMovie()}>
-        <Search className={search_classes.searchIcon} />
-      </Button>
-    </div>)
-  }
-
   return (
     <div>
       <Header
         brand={t('SiteName')}
-        searchBar={renderSearchBar()}
+        searchBar={<></>}
         rightLinks={<HeaderLinks />}
         fixed
         color="transparent"
@@ -156,8 +101,8 @@ export default function Category(props) {
       <div className={classNames(classes.main, classes.mainRaised)}>
         <InfiniteScroll
           dataLength={loadedMoives.length}
-          next={fetchMoreData}
-          hasMore={searchInput.length > 0 ? false : filteredMovies.length > loadedMoives.length ? true : false}
+          next={() => fetchMoreData(false)}
+          hasMore={hasMore}
           loader={<div style={{textAlign:"center"}}><h4>Loading...</h4></div>}
           endMessage={<div style={{textAlign:"center"}}><h4>End</h4></div>}
         >

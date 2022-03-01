@@ -41,14 +41,17 @@ export default function HeaderLinks(props) {
             <Link to="/" className={classes.dropdownLink}>
               {t('AllMovies')}
             </Link>,
-            <Link to="/Cat/1" className={classes.dropdownLink}>
+            <Link to="/Cat/2" className={classes.dropdownLink}>
               {t('WesternMovies')}
             </Link>,
-            <Link to="/Cat/2" className={classes.dropdownLink}>
+            <Link to="/Cat/4" className={classes.dropdownLink}>
               {t('AsianMovies')}
             </Link>,
             <Link to="/Cat/3" className={classes.dropdownLink}>
               {t('ChineseMovies')}
+            </Link>,
+            <Link to="/Cat/1" className={classes.dropdownLink}>
+              {t('HKTWMovies')}
             </Link>
           ]}
         />

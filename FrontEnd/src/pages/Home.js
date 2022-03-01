@@ -22,7 +22,6 @@ import Card from './HomeComponent/Card';
 import { HTMLDecode } from "../utils/helper.js";
 import {useTranslation} from 'react-i18next';
 
-
 import styles from "assets/jss/material-kit-react/views/components.js";
 import search_styles from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.js";
 import { getAllMovies, search } from "../actions/index.js";
