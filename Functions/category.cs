@@ -58,7 +58,7 @@ namespace Movies.Function
         default:
           break;
       }
-      var sqlQueryText = String.Format("SELECT * FROM c where c.partitionKey = '{0}'", partitionKey);
+      var sqlQueryText = String.Format("SELECT * FROM c where c.partitionKey = '{0}' order by c.MovieId DESC", partitionKey);
       QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
       FeedIterator<AinunuMovieDTO> queryResultSetIterator = container.GetItemQueryIterator<AinunuMovieDTO>(queryDefinition);
 

@@ -52,7 +52,7 @@ export function getAllMovies(page = 1) {
     .get(`${BaseUrl}/api/allmovies?page=${page}`, {
       cache: true,
       refresh: false,
-      expire_time: 3600000
+      expire_time: 36
     })
     .then(res => { return res.data })
     .catch(err => { return err.message.data });
@@ -63,7 +63,7 @@ export function getMovieDetail(id = 1) {
     .get(`${BaseUrl}/api/movie?id=${id}`, {
       cache: true,
       refresh: false,
-      expire_time: 3600000
+      expire_time: 36
     })
     .then(res => { return res.data })
     .catch(err => { return err.message.data });
@@ -74,7 +74,7 @@ export function getMovieDownload(id = 1) {
     .get(`${BaseUrl}/api/download?id=${id}`, {
       cache: true,
       refresh: false,
-      expire_time: 3600000
+      expire_time: 36
     })
     .then(res => { return res.data })
     .catch(err => { return err.message.data });
@@ -85,7 +85,7 @@ export function getCategory(id = 1, page = 1) {
     .get(`${BaseUrl}/api/category?id=${id}&page=${page}`, {
       cache: true,
       refresh: false,
-      expire_time: 3600000
+      expire_time: 36
     })
     .then(res => { return res.data })
     .catch(err => { return err.message.data });
@@ -96,7 +96,7 @@ export function search(keyword = "", page = 1) {
     .get(`${BaseUrl}/api/search?keyword=${keyword}&page=${page}`, {
       cache: true,
       refresh: false,
-      expire_time: 3600000
+      expire_time: 36
     })
     .then(res => { return res.data })
     .catch(err => { return err.message.data });

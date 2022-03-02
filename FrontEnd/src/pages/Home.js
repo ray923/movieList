@@ -35,13 +35,13 @@ export default function Home(props) {
   const search_classes = useSearch_Styles();
   const { ...rest } = props;
   const [loadedMoives, setLoadedMoives] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
 
   const [searchInput, setSearchInput] = useState("");
   const [loadedSearch, setLoadedSearch] = useState([]);
   const [pageNumberSearch, setPageNumberSearch] = useState(1);
-  const [hasMoreSearch, setHasMoreSearch] = useState(true);
+  const [hasMoreSearch, setHasMoreSearch] = useState(false);
   const [doSearch, setDoSearch] = useState(false);
 
   const fetchMoreData = async () => {
@@ -54,43 +54,68 @@ export default function Home(props) {
       setHasMore(true);
     }
     setLoadedMoives([...loadedMoives, ...loadedMovieList]);
-    setPageNumber(pageNumber + 1);
   }
 
   useEffect(() => { 
     setSearchInput("");
-    fetchMoreData();
+    var page = props.match.params.pageNumber;
+    page = Number(page);
+    if (isNaN(page) || page === 0)
+    {
+      page = 1;
+    }
+    console.log(page);
+    setPageNumber(page);
   }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => { 
-    if (searchInput.length === 0)
+    if (pageNumber > 0) {
+      fetchMoreData();
+    }
+  }, [pageNumber]);
+
+  useEffect(() => { 
+    if (doSearch) {
+      searchMovie(true);
+    }
+  }, [pageNumberSearch]);
+
+  useEffect(() => { 
+    if (doSearch && searchInput.length === 0)
     {
       setDoSearch(false);
+      setHasMoreSearch(false);
+      setHasMore(false);
+      setLoadedMoives([]);
+      setLoadedSearch([]);
+      setPageNumber(1);
+      setPageNumberSearch(1);
     }
   }, [searchInput]);
 
-  var searchMovie = async () => { 
+  const searchMovie = async (more) => { 
     if (searchInput.length > 0) {
       setDoSearch(true);
-      var searchResult = await search(searchInput, pageNumberSearch);
-      if (searchResult.length === 0 || searchResult.length < 48) {
-        setHasMoreSearch(false);
+      if (more) {
+        var searchResult = await search(searchInput, pageNumberSearch);
+        if (searchResult.length === 0 || searchResult.length < 48) {
+          setHasMoreSearch(false);
+        }
+        else {
+          setHasMoreSearch(true);
+        }
+        setLoadedSearch([...loadedSearch, ...searchResult]);
       }
-      else
-      {
-        setHasMoreSearch(true);
+      else {
+        var searchResult = await search(searchInput, 1);
+        if (searchResult.length === 0 || searchResult.length < 48) {
+          setHasMoreSearch(false);
+        }
+        else {
+          setHasMoreSearch(true);
+        }
+        setLoadedSearch(searchResult);
       }
-      setLoadedSearch([...loadedSearch, ...searchResult]);
-      setPageNumberSearch(pageNumberSearch + 1);
-    } else {
-      setDoSearch(false);
-      setPageNumber(1);
-      setHasMore(true);
-      setLoadedMoives([]);
-      setPageNumberSearch(1);
-      setHasMoreSearch(true);
-      setLoadedSearch([]);
-      fetchMoreData();
     }
   }
 
@@ -142,7 +167,7 @@ export default function Home(props) {
           onChangeValue={(e) => setSearchInput(e)}
           searchValue={searchInput}
       />
-      <Button justIcon round color="white" onClick = {() => searchMovie()}>
+      <Button justIcon round color="white" onClick = {() => searchMovie(false)}>
         <Search className={search_classes.searchIcon} />
       </Button>
     </div>)
@@ -167,8 +192,8 @@ export default function Home(props) {
           <GridContainer>
             <GridItem>
               <div className={classes.brand}>
-                <h1 className={classes.title}></h1>
-                <h3 className={classes.subtitle}></h3>
+                <h1 className={classes.title}> </h1>
+                <h3 className={classes.subtitle}> </h3>
               </div>
             </GridItem>
           </GridContainer>
@@ -177,8 +202,8 @@ export default function Home(props) {
       <div className={classNames(classes.main, classes.mainRaised)}>
         <InfiniteScroll
           dataLength={doSearch ? loadedSearch.length : loadedMoives.length}
-          next={doSearch > 0 ? searchMovie : fetchMoreData}
-          hasMore={doSearch > 0 ? hasMoreSearch : hasMore}
+          next={() => { doSearch ? setPageNumberSearch(pageNumberSearch + 1) : setPageNumber(pageNumber + 1) }}
+          hasMore={doSearch ? hasMoreSearch : hasMore}
           loader={<div style={{textAlign:"center"}}><h4>Loading...</h4></div>}
           endMessage={<div style={{textAlign:"center"}}><h4>End</h4></div>}
         >

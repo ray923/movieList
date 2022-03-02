@@ -5,7 +5,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import Search from "@material-ui/icons/Search";
 // @material-ui/icons
 // core components
 import Header from "components/Header/Header.js";
@@ -29,12 +28,13 @@ export default function Category(props) {
   const { t } = useTranslation();
   const classes = useStyles();
   const { ...rest } = props;
+  const [categoryId, setCategoryId] = useState(props.match.params.catId);
   const [loadedMoives, setLoadedMoives] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
 
-  const fetchMoreData = async (init) => {
-    var loadedMovieList = await getCategory(props.location.pathname.split('/')[2], init? 1 : pageNumber);
+  const fetchMoreData = async () => {
+    var loadedMovieList = await getCategory(categoryId, pageNumber);
     if (loadedMovieList.length === 0 || loadedMovieList.length < 48) {
       setHasMore(false);
     }
@@ -42,20 +42,29 @@ export default function Category(props) {
     {
       setHasMore(true);
     }
-    console.log(pageNumber);
     setLoadedMoives((pre) => { return [...pre, ...loadedMovieList] });
-    if (!init) {
-      setPageNumber(pageNumber + 1);
-    } else {
-      setPageNumber(2);
-    }
   }
 
   useEffect(() => { 
     setLoadedMoives([]);
-    setPageNumber(1);
-    fetchMoreData(true);
+    setHasMore(false);
+    var page = props.match.params.pageNumber;
+    page = Number(page);
+    if (isNaN(page) || page === 0)
+    {
+      page = 1;
+    }
+    setPageNumber(page);
+    setCategoryId(props.match.params.catId);
   }, [props.location.pathname]);// eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    console.log(pageNumber);
+    console.log(categoryId);
+    if (pageNumber > 0) {
+      fetchMoreData();
+    }
+  }, [pageNumber,categoryId]);
 
   function RenderMovieCards() {
     return loadedMoives.map((item) => {
@@ -91,8 +100,8 @@ export default function Category(props) {
           <GridContainer>
             <GridItem>
               <div className={classes.brand}>
-                <h1 className={classes.title}></h1>
-                <h3 className={classes.subtitle}></h3>
+                <h1 className={classes.title}> </h1>
+                <h3 className={classes.subtitle}> </h3>
               </div>
             </GridItem>
           </GridContainer>
@@ -101,7 +110,7 @@ export default function Category(props) {
       <div className={classNames(classes.main, classes.mainRaised)}>
         <InfiniteScroll
           dataLength={loadedMoives.length}
-          next={() => fetchMoreData(false)}
+          next={() => setPageNumber(pageNumber + 1)}
           hasMore={hasMore}
           loader={<div style={{textAlign:"center"}}><h4>Loading...</h4></div>}
           endMessage={<div style={{textAlign:"center"}}><h4>End</h4></div>}

@@ -38,7 +38,7 @@ namespace Movies.Function
       // Create a new database
       database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
       container = await database.CreateContainerIfNotExistsAsync(containerId, "/partitionKey");
-      var sqlQueryText = "SELECT * FROM c";
+      var sqlQueryText = "SELECT * FROM c order by c.MovieId DESC";
       QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
       FeedIterator<AinunuMovieDTO> queryResultSetIterator = container.GetItemQueryIterator<AinunuMovieDTO>(queryDefinition);
 

@@ -16,7 +16,8 @@ ReactDOM.render(
   <Router history={hist}>
     <Switch>
       <Route exact path='/' component={Home} />
-      <Route exact path='/Cat/:catId' component={Cate} />
+      <Route exact path='/:pageNumber' component={Home} />
+      <Route exact path='/Cat/:catId/:pageNumber' component={Cate} />
       <Route exact path='/D/:movieId' component={Download} />
       <Route exact path='/content/:movieId' component={Content} />
     </Switch>
