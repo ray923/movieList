@@ -16,8 +16,6 @@ namespace Movies.Function
 {
   public static class allmovies
   {
-    private static readonly string EndpointUri = "https://ray-movie.documents.azure.com:443/";
-    private static readonly string PrimaryKey = "qDEJv6fymsPZpMro2iAOKvEZm0vb22RfqbOpVMDK1Y57AI1O8dpTL46H5jtGIZXJTE8r3pPPb28gQ64fzwBYcw==";
     // The Cosmos client instance
     private static CosmosClient cosmosClient;
     // The database we will create
