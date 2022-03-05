@@ -51,7 +51,7 @@ export function getAllMovies(page = 1) {
   return axios
     .get(`${BaseUrl}/api/allmovies?page=${page}`, {
       cache: true,
-      refresh: false,
+      refresh: true,
       expire_time: 600000
     })
     .then(res => { return res.data })
@@ -62,7 +62,7 @@ export function getMovieDetail(id = 1) {
   return axios
     .get(`${BaseUrl}/api/movie?id=${id}`, {
       cache: true,
-      refresh: false,
+      refresh: true,
       expire_time: 600000
     })
     .then(res => { return res.data })
@@ -84,7 +84,7 @@ export function getCategory(id = 1, page = 1) {
   return axios
     .get(`${BaseUrl}/api/category?id=${id}&page=${page}`, {
       cache: true,
-      refresh: false,
+      refresh: true,
       expire_time: 600000
     })
     .then(res => { return res.data })
