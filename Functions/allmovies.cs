@@ -16,6 +16,8 @@ namespace Movies.Function
 {
   public static class allmovies
   {
+    private static readonly string EndpointUri = "";
+    private static readonly string PrimaryKey = "";
     // The Cosmos client instance
     private static CosmosClient cosmosClient;
     // The database we will create
