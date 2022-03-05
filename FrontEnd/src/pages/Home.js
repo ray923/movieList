@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import { useState, useEffect } from "react"; // useState is a hook
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -74,13 +75,13 @@ export default function Home(props) {
   }, [pageNumber]);
 
   useEffect(() => { 
-    if (doSearch) {// eslint-disable-next-line react-hooks/exhaustive-deps
-      searchMovie(true);// eslint-disable-next-line react-hooks/exhaustive-deps
+    if (doSearch) {
+      searchMovie(true);
     }
   }, [pageNumberSearch]);
 
   useEffect(() => { 
-    if (doSearch && searchInput.length === 0)// eslint-disable-next-line react-hooks/exhaustive-deps
+    if (doSearch && searchInput.length === 0)
     {
       setDoSearch(false);
       setHasMoreSearch(false);
@@ -215,3 +216,4 @@ export default function Home(props) {
     </div>
   );
 }
+/* eslint-enable */
