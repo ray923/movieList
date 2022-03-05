@@ -44,18 +44,6 @@ export default function Home(props) {
   const [hasMoreSearch, setHasMoreSearch] = useState(false);
   const [doSearch, setDoSearch] = useState(false);
 
-  const fetchMoreData = async () => {
-    var loadedMovieList = await getAllMovies(pageNumber);
-    if (loadedMovieList.length === 0 || loadedMovieList.length < 48) {
-      setHasMore(false);
-    }
-    else
-    {
-      setHasMore(true);
-    }
-    setLoadedMoives([...loadedMoives, ...loadedMovieList]);
-  }
-
   useEffect(() => { 
     setSearchInput("");
     var page = props.match.params.pageNumber;
@@ -69,19 +57,30 @@ export default function Home(props) {
   }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => { 
+    const fetchMoreData = async () => {
+      var loadedMovieList = await getAllMovies(pageNumber);
+      if (loadedMovieList.length === 0 || loadedMovieList.length < 48) {
+        setHasMore(false);
+      }
+      else
+      {
+        setHasMore(true);
+      }
+      setLoadedMoives([...loadedMoives, ...loadedMovieList]);
+    }
     if (pageNumber > 0) {
       fetchMoreData();
     }
   }, [pageNumber]);
 
   useEffect(() => { 
-    if (doSearch) {
-      searchMovie(true);
+    if (doSearch) {// eslint-disable-next-line react-hooks/exhaustive-deps
+      searchMovie(true);// eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [pageNumberSearch]);
 
   useEffect(() => { 
-    if (doSearch && searchInput.length === 0)
+    if (doSearch && searchInput.length === 0)// eslint-disable-next-line react-hooks/exhaustive-deps
     {
       setDoSearch(false);
       setHasMoreSearch(false);
@@ -97,7 +96,7 @@ export default function Home(props) {
     if (searchInput.length > 0) {
       setDoSearch(true);
       if (more) {
-        var searchResult = await search(searchInput, pageNumberSearch);
+        let searchResult = await search(searchInput, pageNumberSearch);
         if (searchResult.length === 0 || searchResult.length < 48) {
           setHasMoreSearch(false);
         }
@@ -107,7 +106,7 @@ export default function Home(props) {
         setLoadedSearch([...loadedSearch, ...searchResult]);
       }
       else {
-        var searchResult = await search(searchInput, 1);
+        let searchResult = await search(searchInput, 1);
         if (searchResult.length === 0 || searchResult.length < 48) {
           setHasMoreSearch(false);
         }

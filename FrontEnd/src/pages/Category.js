@@ -33,18 +33,6 @@ export default function Category(props) {
   const [pageNumber, setPageNumber] = useState(0);
   const [hasMore, setHasMore] = useState(false);
 
-  const fetchMoreData = async () => {
-    var loadedMovieList = await getCategory(categoryId, pageNumber);
-    if (loadedMovieList.length === 0 || loadedMovieList.length < 48) {
-      setHasMore(false);
-    }
-    else
-    {
-      setHasMore(true);
-    }
-    setLoadedMoives((pre) => { return [...pre, ...loadedMovieList] });
-  }
-
   useEffect(() => { 
     setLoadedMoives([]);
     setHasMore(false);
@@ -61,6 +49,17 @@ export default function Category(props) {
   useEffect(() => {
     console.log(pageNumber);
     console.log(categoryId);
+    const fetchMoreData = async () => {
+      var loadedMovieList = await getCategory(categoryId, pageNumber);
+      if (loadedMovieList.length === 0 || loadedMovieList.length < 48) {
+        setHasMore(false);
+      }
+      else
+      {
+        setHasMore(true);
+      }
+      setLoadedMoives((pre) => { return [...pre, ...loadedMovieList] });
+    }
     if (pageNumber > 0) {
       fetchMoreData();
     }
